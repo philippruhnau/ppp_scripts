@@ -1,0 +1,12 @@
+# hash to comment
+# use this file to define what’s to be ignored by git
+
+*.[oa]
+# ignore autosaves
+*~
+# ignore old autosaves
+*.asv
+
+# ignore the shell which is supposed to update
+run_update.sh
+.DS_Store
