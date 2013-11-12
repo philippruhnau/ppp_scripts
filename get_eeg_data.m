@@ -1,11 +1,13 @@
 function data_selection = get_eeg_data(EEG, channels, output, group)
 
 
-% function get_eeg_data(EEG, channels, output, group)
+% function data_selection = get_eeg_data(EEG, channels, output, group)
 %
-% selects data of specified channels (ordered as the input) from EEG struct
-% may average over subjects
-% may average over specified channel groups
+% selects data of specified channels (ordered as the input) from EEGLAB
+% structure
+%
+% can average over subjects
+% can average over specified channel groups
 %
 % mandatory input:
 %
@@ -19,7 +21,23 @@ function data_selection = get_eeg_data(EEG, channels, output, group)
 % group     - vector from 1 to N indicating to be averaged channels,
 %             default: no averaging
 %
-% copyright (c), 2011, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2011-08-03
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% copyright (c), 2011, P. Ruhnau, email: philipp.ruhnau@unitn.it, 2011-08
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 if nargin < 1, help get_eeg_data; return; end
 if ~exist('channels', 'var'),  error('Variable ''channels'' is needed'); end

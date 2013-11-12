@@ -1,4 +1,5 @@
 function [latency, grandmean] = meeg_latencies(cfg)
+
 % Finds peak maximum/minimum amplitude and respective latency
 % CAVE: within sub conditions must be the same in all between sub groups
 %
@@ -18,9 +19,8 @@ function [latency, grandmean] = meeg_latencies(cfg)
 % cfg.method   - 'peak', 'jackknife', or 'jackind' ['peak'], see comments
 %                for more info
 % cfg.calc     - mean calculation type: 'none', 'rms', 'abs', ['none']
-% cfg.timevar  - default: 50 ms, time delay +/- peak from grandaverage
-%                peak, around which peak is detected in individual
-%                subjects
+% cfg.timevar  - time delay +/- peak from grandaverage peak, around
+%                which peak is detected in individual subjects [50 ms]
 % cfg.wscond   - within subject condition name, [w1 w2 w3 w4...]
 % cfg.bscond   - between subject condition name, [b1 b2 b3 b4...]
 % cfg.stafile  - place of to-be-saved file, only saved if exists
@@ -37,9 +37,23 @@ function [latency, grandmean] = meeg_latencies(cfg)
 % - individual estimates jackknifing: Smulders, 2010, Psychophysiology
 % keep in mind that outliers drastically influence this step,
 % also if latency estimation is not possible (e.g. no peak) this methods
-% creates arbitrary results (better use jackknifing and correct F value)
+% creates arbitrary results (better use jackknifing and correct F-value)
 
-% copyright (c) P. Ruhnau, e-mail: ruhnau@uni-leipzig.de, 2010-10-26
+% copyright (c) P. Ruhnau, e-mail: philipp.ruhnau@unitn.it, 2010-10-26
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 % defaults
 if nargin<1, help meeg_latencies, return, end
@@ -59,8 +73,6 @@ end
 
 % ms to points
 twin = ceil((cfg.timewin - cfg.baseline)*cfg.srate/1000);
-
-
 
 % run thru between subject conditions
 for iB = 1:numel(cfg.data)

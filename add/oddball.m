@@ -4,7 +4,7 @@ function fin_mat = oddball(cfg,sub,block)
 % creates a N by 2 matrix of a randomized sequence containing the input 
 % cfg.trains multiplied by cfg.ntrains (handy for oddball sequence with 
 % controlled global probability and number of standards before each 
-% deviant, see example)
+% deviant, see example in the file)
 %
 % the state of the randomization can be fixed by sub and block (optional) 
 % to yield the same randomization for the same subject (and/or block)
@@ -28,7 +28,7 @@ function fin_mat = oddball(cfg,sub,block)
 %
 % fin_mat     - M by 2 matrix, first line stimulus type, second triggers
 %
-% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 2012-01-03
+
 
 % Example:
 % % start sounds (0 = standard sound) with trigger in second row
@@ -80,8 +80,26 @@ function fin_mat = oddball(cfg,sub,block)
 % %      0     8
 % %      0     2
 % % % % ...
-% 
-
+%
+                       
+% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 2012-01-03
+% (c) copyright P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2011-09-09
+%
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+                       
 % defaults
 if ~isfield(cfg, 'start'), cfg.start = []; end
 if nargin == 2, block = 1; end

@@ -43,7 +43,7 @@ function [g_eta2_me g_eta2_ma c_eta2 p_eta2] = eta_squared(SSb_me, SSb_ma, SSb_e
 % -------------------------------------------------------------------------
 %
 
-% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 2011-09-09
+% (c) copyright P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2011-09-09
 %
 %
 % This program is free software; you can redistribute it and/or modify
@@ -59,6 +59,7 @@ function [g_eta2_me g_eta2_ma c_eta2 p_eta2] = eta_squared(SSb_me, SSb_ma, SSb_e
 % You should have received a copy of the GNU General Public License
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
 %
 % update: function naming and documentation corrected, 2012-02-01 pruhnau
 

@@ -4,7 +4,7 @@ function [coor n actCha cellInd] = eeg_channels(chaninfo, chan_sel)
 % eeg_channels(chaninfo, chan_sel)
 % looks up selected channel names/numbers  and coordinates for eeg-data
 % Input:
-% chaninfo - channel information in EEG.chanloc (eeglab)
+% chaninfo - channel information in EEG.chanloc (eeglab), optional
 % chan_sel - string or vector of numbers with channel selection
 %
 % Output:
@@ -15,9 +15,23 @@ function [coor n actCha cellInd] = eeg_channels(chaninfo, chan_sel)
 % cellInd - indizes of concordant channels of chan_sel and channels
 %           existent in this file, necesary if not matching
 %
+
 % ---------------------------------------------------
 % copyright (c), 2010, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2010-07-29
-
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 if nargin < 1, help eeg_channels; return, end
 
