@@ -20,8 +20,8 @@ function [latency grandmean] = meeg_latencies(cfg)
 % cfg.timevar  - default: 50 ms, time delay +/- peak from grandaverage
 %                peak, around which peak is detected in individual
 %                subjects
-% cfg.wscond   - within subject condition name, [w1 w2 w3 w4...]
-% cfg.bscond   - between subject condition name, [b1 b2 b3 b4...]
+% cfg.wscond   - within subject condition name, [w1 w2 w3 ...]
+% cfg.bscond   - between subject condition name, [b1 b2 b3 ...]
 % cfg.stafile  - place of to-be-saved file, only saved if exists
 %
 % Output
