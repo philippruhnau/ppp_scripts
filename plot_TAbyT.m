@@ -1,7 +1,7 @@
 function plot_TAbyT(data,cfg)
 
 % function plot_TAbyT(data,cfg)
-% plots single trials or frequencies in time x amplitude using imagesc
+% plots single trials or frequencies in a time x amplitude plot using imagesc
 %
 % Mandatory Input:
 % data         - m by n matrix (e.g., trials by timepoints)
@@ -22,9 +22,12 @@ function plot_TAbyT(data,cfg)
 %                using cfg.vline_style.color/width
 % cfg.colorbar - define (any value) if colorbar plotting intended 
 % cfg.yreverse - set to false, if increasing y-axis values are desired 
+% cfg.mask     - m by n matrix (same as data) used to mask, e.g.,
+%                non-significant values, translates to the alpha level in
+%                matlab (0 = completely transparent; 1 = no transparency)
 %
 
-% P.Ruhnau, Email: philipp_ruhnau@yahoo.de, 2012-05-08
+% P.Ruhnau, Email: philipp_ruhnau@yahoo.de, 2012
 %    
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -40,6 +43,8 @@ function plot_TAbyT(data,cfg)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
+
+% version 20131202 - mask parameter added (transparency)
 % version 20130808 - smoothing procedure changed, iterpolation
                                           
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
@@ -53,6 +58,10 @@ end
 if ~isfield(cfg, 'yaxis'), cfg.yaxis = 1:size(data,1); end
 % if no value here, have y-axis direction normal (increasing)
 if ~isfield(cfg, 'yreverse'), cfg.yreverse = true; end
+% convert logicals to doubles (just in case)
+if isfield(cfg, 'mask'), 
+    cfg.mask = double(cfg.mask);
+end
 
 figure;
 % general plot definitions
@@ -72,7 +81,9 @@ set(gcf,...
 if isfield(cfg, 'smooth')
     %% do smoothing now with interpolation
     plotData = interp2(data,cfg.smooth);
-    
+    if isfield(cfg, 'mask') % smooth also mask field if present
+        maskData = interp2(cfg.mask,cfg.smooth); 
+    end
 else
     plotData = data;
 end
@@ -80,6 +91,11 @@ end
 % plotting the data
 imagesc(cfg.xtime,cfg.yaxis,plotData, [cfg.clim])
 hold on;
+
+if isfield(cfg, 'mask')
+    % set alpha according to mask field
+    alpha(maskData);
+end
 
 % have Y-axis normal (increasing values, default)
 if cfg.yreverse == true

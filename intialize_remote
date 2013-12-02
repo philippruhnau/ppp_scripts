@@ -5,3 +5,6 @@ git --bare init
 git remote add meg_tn ssh://philipp.ruhnau@192.168.240.27/mnt/storage/tier1/natwei/Shared/philipp/git_meg_server/ppp_scripts/
 # or
 git remote add meg_tn ssh://philipp.ruhnau@192.168.240.27/mnt/storage/tier1/natwei/Shared/philipp/git_meg_server/useful_scripts/
+
+# on server
+git clone /mnt/storage/tier1/natwei/Shared/philipp/git_meg_server/ folder/
