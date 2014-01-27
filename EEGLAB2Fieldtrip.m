@@ -1,6 +1,6 @@
 function [DATA] = EEGLAB2Fieldtrip(cfg)
 % 
-% EEGLAB2Fieldtrip(cfg) Formats epoched .set data from eeglab to fieldtrip
+% [DATA] = EEGLAB2Fieldtrip(cfg) formats epoched .set data from eeglab to fieldtrip
 % format. When a destination folder is given these data are saved. 
 %
 %

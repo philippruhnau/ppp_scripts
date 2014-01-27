@@ -1,4 +1,4 @@
-function plot_TAbyT(data,cfg)
+function h = plot_TAbyT(data,cfg)
 
 % function plot_TAbyT(data,cfg)
 % plots single trials or frequencies in a time x amplitude plot using imagesc
@@ -63,7 +63,7 @@ if isfield(cfg, 'mask'),
     cfg.mask = double(cfg.mask);
 end
 
-figure;
+h = figure;
 % general plot definitions
 set(gca,...
     'Box'          , 'off'     , ...

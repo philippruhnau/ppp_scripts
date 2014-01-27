@@ -15,7 +15,7 @@ function plot_scatter(data, cfg)
 % cfg.linecolor - cell array - linecolor [{'k' 'k' ...}]
 %
 
-% 1121231234123451234561234567123456781234567891451245123462332
+% -------------------------------------------------------------
 % (c) copyright P. Ruhnau - philipp.ruhnau@unitn.it, 2012-07-05
 %
 % This program is free software; you can redistribute it and/or modify

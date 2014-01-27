@@ -1,4 +1,4 @@
-function [comparison levels ps pw_matrix] = direct_comparisons(X,p,factypes,pool)
+function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,pool)
 
 % function [comparison levels ps pw_matrix] = direct_comparisons(X,p,factypes,pool)
 %
@@ -10,7 +10,7 @@ function [comparison levels ps pw_matrix] = direct_comparisons(X,p,factypes,pool
 %
 % mandatory input:
 %
-% X - n by m matrix of datapoints and group/subject indizes
+% X - n by m matrix of datapoints and group/condition indizes
 %     first column - data; second to mth column - factorstep indizes
 %
 % optional input:

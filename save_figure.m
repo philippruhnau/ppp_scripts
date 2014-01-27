@@ -34,6 +34,10 @@ if ~isempty(strfind(name, 'png'))
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'eps'))
     eval(['print -depsc2 -painters -loose -r' num2str(resolution) ' ' name]);
+%     eval(['print -depsc2 -opengl -loose -r' num2str(resolution) ' ' name]);
+    disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
+elseif ~isempty(strfind(name, 'jpg'))
+    eval(['print -djpeg90 -r' num2str(resolution) ' ' name]);
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 else
     disp('WARNING: No format given, nothing is saved!!!!')
