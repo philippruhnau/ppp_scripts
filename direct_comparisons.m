@@ -244,7 +244,8 @@ if nargout > 1
     p_masked = pvals<=I/V*q/cVID;
 end;
 
-% finds significant effects
+
+% find significant effects
 function [numSign signif sSign] = find_p_FDR(results, p, pp)
 
 
@@ -262,3 +263,22 @@ else
 		sSign  = '<';
 	end
 end
+
+function [numSign signif sSign] = find_p_FDR(results, p, pp)
+
+
+numSign = max(find(round(p*1e10) == round(results.p*1e10)));
+if numSign ~= 0
+	signif = pp(numSign);
+	sSign  = '=';
+else
+	numSign = length(find(round(p*1e10) > round(results.p*1e10)));
+	if numSign == 0
+		signif = 0.05;
+		sSign  = '>';
+	else
+		signif = pp(numSign);
+		sSign  = '<';
+	end
+end
+
