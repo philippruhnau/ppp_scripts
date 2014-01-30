@@ -34,7 +34,7 @@ function [latency grandmean] = meeg_latencies(cfg)
 % -------------------------------------------------------------------
 % for jackknifing part see e.g. Miller et al., 2009, Psychophysiology
 
-% copyright (c) P. Ruhnau, e-mail: ruhnau@uni-leipzig.de, 2010-10-26
+% copyright (c) P. Ruhnau, e-mail: mail@philipp-ruhnau.de, 2010-10-26
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

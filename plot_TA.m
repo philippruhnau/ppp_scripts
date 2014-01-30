@@ -24,7 +24,7 @@ function plot_TA(data, sR, cfg)
 
 %
 
-% copyright (c), 2011, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2011-08-03
+% copyright (c), 2011, P. Ruhnau, email: mail@philipp-ruhnau.de, 2011-08-03
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

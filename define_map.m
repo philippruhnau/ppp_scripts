@@ -1,5 +1,3 @@
-
-
 function [mycolor, steps] = define_map(mapnr, steps)
 
 % defines personalized color map
@@ -11,7 +9,7 @@ function [mycolor, steps] = define_map(mapnr, steps)
 %
 %
 
-% (c) 2011 - P.Ruhnau - email: philipp_ruhnau@yahoo.de.
+% (c) 2011 - P.Ruhnau - email: mail@philipp-ruhnau.de
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

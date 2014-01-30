@@ -6,7 +6,7 @@ function new_dist = change_dist(x, new_mean, new_rg)
 %
 % CAVE: range is equally large in all columns afterwards
 
-% (c) copyright 2012. P.Ruhnau. philipp.ruhnau@yahoo.de
+% (c) copyright 2012. P.Ruhnau. mail@philipp-ruhnau.de
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

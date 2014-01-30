@@ -16,7 +16,7 @@ function plot_plain_head(modality, sensors, caption)
 %
 % caption   - if caption = 1, sensor names are put at each sensor
 
-% copyright (c), 2011, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2011-05-03
+% copyright (c), 2011, P. Ruhnau, email: mail@philipp-ruhnau.de, 2011-05-03
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

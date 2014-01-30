@@ -31,7 +31,7 @@ function [phi, itcA, itcB, itc_all] = cimecex_itc_pbi(dataA, dataB, itc_all)
 %   7869–7876.
 
 %--------------------------------------------------------------------
-% copyright (c), 2013, P. Ruhnau, philipp_ruhnau@yahoo.de, 2013-04-05
+% copyright (c), 2013, P. Ruhnau, mail@philipp-ruhnau.de, 2013-04-05
 
 if isfield(dataA, 'fourierspctrm')
     disp('Input data contain fieldtrip structures including fourier spectra.')

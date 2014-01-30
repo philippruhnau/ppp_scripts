@@ -38,7 +38,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 %               if non significant
 %
                                                               
-% P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2012-12-04
+% P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012-12-04
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

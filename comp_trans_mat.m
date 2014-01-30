@@ -5,7 +5,7 @@ function trans_mat = comp_trans_mat(size_data, nMeans)
 % data with a specific size (size_data) such that the average over
 % nMeans points is calculated
 
-% (c) copyright 2013 P.Ruhnau, Email: philipp.ruhnau@unitn.it
+% (c) copyright 2013 P.Ruhnau, Email: mail@philipp-ruhnau.de
 %
 %
 % This program is free software; you can redistribute it and/or modify

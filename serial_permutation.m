@@ -8,7 +8,7 @@ function finArray = serial_permutation(n, values)
 %
 % the easier way to do this is to compute perms(1:n-1), but what can i do ;)
 
-% (c) copyright P.Ruhnau, philipp.ruhnau@unitn.it
+% (c) copyright P.Ruhnau, mail@philipp-ruhnau.de
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

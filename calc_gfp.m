@@ -25,7 +25,7 @@ function [GFP DIS] = calc_gfp(X, avgRef, normFac)
 %
 
 % ----------------------------------------------------
-% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 07-18-2012
+% P.Ruhnau, Email: mail@philipp-ruhnau.de, 07-18-2012
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

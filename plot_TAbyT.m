@@ -27,7 +27,7 @@ function h = plot_TAbyT(data,cfg)
 %                matlab (0 = completely transparent; 1 = no transparency)
 %
 
-% P.Ruhnau, Email: philipp_ruhnau@yahoo.de, 2012
+% (c) P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012
 %    
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

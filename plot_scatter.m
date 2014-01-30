@@ -16,7 +16,7 @@ function plot_scatter(data, cfg)
 %
 
 % -------------------------------------------------------------
-% (c) copyright P. Ruhnau - philipp.ruhnau@unitn.it, 2012-07-05
+% (c) copyright P. Ruhnau - mail@philipp-ruhnau.de, 2012-07-05
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ function plot_scatter(data, cfg)
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
 
+if nargin < 2, cfg = struct; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,2)) = {'k'}; end
 if ~isfield(cfg, 'style'),      cfg.style(1:size(data,2)) = {'*'}; end
 if ~isfield(cfg, 'link'), cfg.link = 0; end
@@ -67,3 +68,4 @@ if cfg.link == 1 % connect points with black line
     plot((1:size(data,2))',data(iLine,:), 'color',  cfg.linecolor{iLine}, 'linestyle', cfg.linestyle{iLine})
     end
 end
+

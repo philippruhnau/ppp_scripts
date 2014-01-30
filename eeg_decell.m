@@ -8,7 +8,7 @@ function [EEG] = eeg_decell(EEG, latency)
 % optional input
 % latency - latency of trigger that should remain in epoch (default: 0)
 
-% (c) copyright P.Ruhnau, e-mail: philipp.ruhnau@unitn.it, 2012
+% (c) copyright P.Ruhnau, e-mail: mail@philipp-ruhnau.de, 2012
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -14,7 +14,7 @@ function [data cfg] = meg_grand_avr(cfg)
 % cfg.comment     - average name
 % cfg.sfreq       - sampling rate
 
-% (c) copyright P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2011-09-09
+% (c) copyright P.Ruhnau, Email: mail@philipp-ruhnau.de, 2011-09-09
 %
 %
 % This program is free software; you can redistribute it and/or modify

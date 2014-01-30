@@ -1,6 +1,8 @@
-function results = rmANOVA32(X,names)
+function results = rmANOVA21(X,names)
 
 % results = ANOVA21(X, names)
+% Description: two-way analysis of variance with repeated measurements on
+%              one factor, n may be unequal between groups
 %
 % Mandatory input:
 % X - n by 4 matrix of datapoints and group indizes
@@ -20,11 +22,9 @@ function results = rmANOVA32(X,names)
 % Reference:
 %	Bortz (1999) Statistik fuer Sozialwissenschaftler. Springer Verlag
 %
-% Description: two-way analysis of variance with repeated measurements on
-%              one factor, n may be unequal in groups
 % ----------------------------------------------------------------
 
-% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 2011-08-19
+% P.Ruhnau, Email: mail@philipp-ruhnau.de, 2011-08-19
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -23,7 +23,7 @@ function data_selection = get_eeg_data(EEG, channels, output, group)
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% copyright (c), 2011, P. Ruhnau, email: philipp.ruhnau@unitn.it, 2011-08
+% copyright (c), 2011, P. Ruhnau, email: mail@philipp-ruhnau.de, 2011-08
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

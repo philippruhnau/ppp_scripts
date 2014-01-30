@@ -16,7 +16,7 @@ function results = ANOVA1(data,grps,table, names)
 % Description: one-way analysis of variance, n may be not equal in all groups
 
 % ----------------------------------------------------------------
-% P.Ruhnau, Email: ruhnau@uni-leipzig.de, 2011-08-19
+% P.Ruhnau, Email: mail@philipp-ruhnau.de, 2011-08-19
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

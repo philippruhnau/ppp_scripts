@@ -6,7 +6,7 @@ function sem = stderror(data)
 %
 % if groups have unequal n, replace missing values with NaNs
 
-% (c) P.Ruhnau, 2012, e-mail: philipp.ruhnau@unitn.it
+% (c) P.Ruhnau, 2012, e-mail: mail@philipp-ruhnau.de
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

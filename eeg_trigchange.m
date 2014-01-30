@@ -33,9 +33,11 @@ function EEG = eeg_trigchange(EEG, position, relation) %old_trig, new_trig, posi
 %
 % EEG      - changed EEG struct
 %
+% former version was eeg_change_trigger (deprecated)
+%
 
 % ------------------------------------------------------------------------
-% P. Ruhnau, email: ruhnau@uni-leipzig.de, 2012-07-03
+% P. Ruhnau, email: mail@philipp-ruhnau.de, 2012-07-03
 %
 %
 % This program is free software; you can redistribute it and/or modify
@@ -52,8 +54,7 @@ function EEG = eeg_trigchange(EEG, position, relation) %old_trig, new_trig, posi
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 % 
-% former version was eeg_change_trigger (deprecated)
-% 
+
 
 if nargin < 3 
 old_trig = position.old_trig;

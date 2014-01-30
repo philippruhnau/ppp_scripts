@@ -20,7 +20,7 @@ function [fid] = write_reject(step, cfg, EEG, events, rel_trig, tcount, subject)
 % subject  - string of subject number or name
 %
 % Output:
-% fid      - file for step 2
+% fid      - file pointer for step 2
 % 
 % file-output-example:
 %
@@ -31,7 +31,7 @@ function [fid] = write_reject(step, cfg, EEG, events, rel_trig, tcount, subject)
 %
 % 
 
-% (c) copyright P.Ruhnau, e-mail: philipp.ruhnau@unitn.it, 2011
+% (c) copyright P.Ruhnau, e-mail: mail@philipp-ruhnau.de, 2011
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

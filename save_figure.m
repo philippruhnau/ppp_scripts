@@ -9,7 +9,7 @@ function save_figure(name, resolution)
 % name       - name and place of to be saved file
 % resolution - picture resolution
 
-% (c) P.Ruhnau, 2013, philipp.ruhnau@unitn.it
+% (c) P.Ruhnau, 2013, mail@philipp-ruhnau.de
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

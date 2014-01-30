@@ -39,7 +39,7 @@ function [latency, grandmean] = meeg_latencies(cfg)
 % also if latency estimation is not possible (e.g. no peak) this methods
 % creates arbitrary results (better use jackknifing and correct F-value)
 
-% copyright (c) P. Ruhnau, e-mail: philipp.ruhnau@unitn.it, 2010-10-26
+% copyright (c) P. Ruhnau, e-mail: mail@philipp-ruhnau.de, 2010-10-26
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

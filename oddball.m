@@ -82,7 +82,7 @@ function fin_mat = oddball(cfg,sub,block)
 % % % % ...
 %
                        
-% (c) copyright P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2012-01-03
+% (c) copyright P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012-01-03
 %
 %
 % This program is free software; you can redistribute it and/or modify

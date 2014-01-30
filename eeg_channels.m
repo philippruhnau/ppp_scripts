@@ -17,7 +17,7 @@ function [coor n actCha cellInd] = eeg_channels(chaninfo, chan_sel)
 %
 
 % ---------------------------------------------------
-% copyright (c), 2010, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2010-07-29
+% copyright (c), 2010, P. Ruhnau, email: mail@philipp-ruhnau.de, 2010-07-29
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

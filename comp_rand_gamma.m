@@ -21,7 +21,7 @@ function [gammaVec gammaVecScaled gammaRaw stats] = comp_rand_gamma(cfg)
 %             mean and variance of the created distribution
 %
 
-% copyright (c), 2012, P. Ruhnau, email: philipp.ruhnau@unitn.it, 2012-11-12
+% copyright (c), 2012, P. Ruhnau, email: mail@philipp-ruhnau.de, 2012-11-12
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

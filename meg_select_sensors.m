@@ -10,7 +10,7 @@ function [labels] = meg_select_sensors(type)
 % 'GRD' (planar gradiometers)
 % 'GRC' (combined gradiometers)
 
-% (c) copyright P.Ruhnau, Email: philipp.ruhnau@unitn.it, 2013
+% (c) copyright P.Ruhnau, Email: mail@philipp-ruhnau.de, 2013
 %
 %
 % This program is free software; you can redistribute it and/or modify

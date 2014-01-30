@@ -47,7 +47,7 @@ function [twdata sedata singsubs] = plot_bargraph(ALLEEG,cfg)
 %
 % ------------------------------------------------------------------------
 
-% copyright (c), 2010, Stefan Illek, Philipp Ruhnau, e-mail: philipp.ruhnau@unitn.it, 2011-08-04
+% copyright (c), 2010, Stefan Illek, Philipp Ruhnau, e-mail: mail@philipp-ruhnau.de, 2011-08-04
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
