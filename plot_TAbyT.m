@@ -2,6 +2,7 @@ function h = plot_TAbyT(data,cfg)
 
 % function plot_TAbyT(data,cfg)
 % plots single trials or frequencies in a time x amplitude plot using imagesc
+% !!!evenly spaced input required!
 %
 % Mandatory Input:
 % data         - m by n matrix (e.g., trials by timepoints)
@@ -14,6 +15,7 @@ function h = plot_TAbyT(data,cfg)
 %
 %
 % Optional [defaults]:
+% cfg.newfig   - if true opens new figure [true]
 % cfg.clim     - color limits [maxmin]
 % cfg.yaxis    - vector of y axis points [default: 1:size(data,1)
 % cfg.smooth   - numeric, smoothing iterations (interpolation)
@@ -27,7 +29,7 @@ function h = plot_TAbyT(data,cfg)
 %                matlab (0 = completely transparent; 1 = no transparency)
 %
 
-% (c) P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012
+% (c) P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012
 %    
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -46,7 +48,8 @@ function h = plot_TAbyT(data,cfg)
 
 % version 20131202 - mask parameter added (transparency)
 % version 20130808 - smoothing procedure changed, iterpolation
-                                          
+
+if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
 
 if ~isfield(cfg, 'xtime'),
@@ -63,7 +66,11 @@ if isfield(cfg, 'mask'),
     cfg.mask = double(cfg.mask);
 end
 
-h = figure;
+if cfg.newfig == 1
+    h = figure;
+else
+    h = gcf;
+end
 % general plot definitions
 set(gca,...
     'Box'          , 'off'     , ...

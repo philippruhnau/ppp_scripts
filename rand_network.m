@@ -1,21 +1,16 @@
-function [nw] = rand_network(n, cfg)
+function [nw] = rand_network(n)
 
 % function [nw] = rand_network(n, cfg)
 %
 % creates a connectivity matrix of a random network of node size n
 %
-% mandatory input:
+% input:
 %
 % n - nodes
 %
-% optional input:
-%
-% cfg.
-%
-%
 % output:
 %
-% nw - n by n matrix of random connectivity values
+% nw - n by n matrix of random pseudo connectivity values
 %
 % 
 

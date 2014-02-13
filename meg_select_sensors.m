@@ -1,14 +1,27 @@
-function [labels] = meg_select_sensors(type)
+function [labels, indx] = meg_select_sensors(type, data_label)
 
-% function [labels] = meg_select_sensors(type)
+% function [labels] = meg_select_sensors(type, data_label)
+% can be used in two ways (NEUROMAG Vectorview306 only)
 %
-% puts out all labels of a selected type
+% 1) meg_select_sensors(type)
+%    puts out all labels belonging to one sensor type (see below)
+% 2) meg_select_sensors(type, data_label)
+%    puts out all labels belonging to one sensor type that are also present
+%    in data_label
 %
-% options for type:
+% input:
+% type  - string, either: 
 % 'ALL' 
 % 'MAG' (magnetometers) 
-% 'GRD' (planar gradiometers)
+% 'GRD' (planar gradiometers), or
 % 'GRC' (combined gradiometers)
+%
+% data_label - cell of strings, sensor names, typically found in data.label
+%
+%
+% output:
+% labels - cell of strings, labels 
+% indx   - vector, label indizes
 
 % (c) copyright P.Ruhnau, Email: mail@philipp-ruhnau.de, 2013
 %
@@ -28,6 +41,10 @@ function [labels] = meg_select_sensors(type)
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
 
+% in case anyone wants to use lower cases...
+type = upper(type);
+
+% now select the right channel types
 if strcmp(type, 'ALL')
     labels = {'MEG0113'    'MEG0112'    'MEG0111'    'MEG0122'    'MEG0123'    'MEG0121'    'MEG0132'    'MEG0133'    'MEG0131'    'MEG0143'    'MEG0142'    'MEG0141'    'MEG0213'    'MEG0212'...
         'MEG0211'    'MEG0222'    'MEG0223'    'MEG0221'    'MEG0232'    'MEG0233'    'MEG0231'    'MEG0243'    'MEG0242'    'MEG0241'    'MEG0313'    'MEG0312'    'MEG0311'    'MEG0322'...
@@ -51,8 +68,7 @@ if strcmp(type, 'ALL')
         'MEG2331'    'MEG2343'    'MEG2342'    'MEG2341'    'MEG2412'    'MEG2413'    'MEG2411'    'MEG2423'    'MEG2422'    'MEG2421'    'MEG2433'    'MEG2432'    'MEG2431'    'MEG2442'...
         'MEG2443'    'MEG2441'    'MEG2512'    'MEG2513'    'MEG2511'    'MEG2522'    'MEG2523'    'MEG2521'    'MEG2533'    'MEG2532'    'MEG2531'    'MEG2543'    'MEG2542'    'MEG2541'...
         'MEG2612'    'MEG2613'    'MEG2611'    'MEG2623'    'MEG2622'    'MEG2621'    'MEG2633'    'MEG2632'    'MEG2631'    'MEG2642'    'MEG2643'    'MEG2641'}';    
-elseif strcmp(type, 'MAG') % magnetometer
-    
+elseif strcmp(type, 'MAG') % magnetometer  
     labels = { 'MEG0111'    'MEG0121'    'MEG0131'    'MEG0141'    'MEG0211'    'MEG0221'    'MEG0231'    'MEG0241'    'MEG0311'    'MEG0321'    'MEG0331'    'MEG0341'    'MEG0411'    'MEG0421'...
         'MEG0431'    'MEG0441'    'MEG0511'    'MEG0521'    'MEG0531'    'MEG0541'    'MEG0611'    'MEG0621'    'MEG0631'    'MEG0641'    'MEG0711'    'MEG0721'    'MEG0731'    'MEG0741'...
         'MEG0811'    'MEG0821'    'MEG0911'    'MEG0921'    'MEG0931'    'MEG0941'    'MEG1011'    'MEG1021'    'MEG1031'    'MEG1041'    'MEG1111'    'MEG1121'    'MEG1131'    'MEG1141'...
@@ -93,6 +109,18 @@ else
     error('Wrong channel selection!')
 end
 
+
+% only when labels from actual data as input
+if nargin > 1
+    % look for intersection of default labels and labels in data
+    [~, indx]  = intersect(labels, data_label);
+    % unsort the sorted index --> same order as in input data field
+    indx = sort(indx);
+    % select labels present in data (with same order as in input data)
+    labels = labels(indx);
+else
+    indx = 1:numel(labels);
+end
 
 
 % % to find only grads do cellfun stuff (check for '1' in last position and
