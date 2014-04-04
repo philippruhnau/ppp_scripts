@@ -2,7 +2,7 @@ function results = rmANOVA32(X,names)
 
 % results = ANOVA32(X, names)
 % Description: three-way analysis of variance with repeated measurements on
-%              two factors, n may be unequal between groups
+%              two factors, groups may have non-equal n
 %
 % Mandatory input:
 % X - n by 5 matrix of datapoints and group indizes

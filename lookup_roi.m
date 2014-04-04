@@ -61,5 +61,5 @@ cfg.roi = roi;
 data.mask_roi=ft_volumelookup(cfg, data);
 % for some reason double needed for the mask??? wtf
 data.roi_mask = double(data.mask_roi);
-data.roi_ind  = find(data.mask_roi(data.inside)==1);
+data.roi_ind  = find(data.mask_roi);
 data.roi_name = roi;
