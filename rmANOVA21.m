@@ -24,7 +24,7 @@ function results = rmANOVA21(X,names)
 %
 % ----------------------------------------------------------------
 
-% P.Ruhnau, Email: mail@philipp-ruhnau.de, 2011-08-19
+% P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2011-08-19
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -146,6 +146,14 @@ results.p.AB = 1 - fcdf(results.F.AB, results.DF.AB, results.DF.Berror);
 results.df.A = [results.DF.A results.DF.Aerror];
 results.df.B = [results.DF.B results.DF.Berror];
 results.df.AB = [results.DF.AB results.DF.Berror];
+
+%% make a quick check if any negative F value
+if any(cell2mat(struct2cell(results.F))<0) % if so display warning
+    % most likely when CT and SS of a factor are equal but differ in the,
+    % e.g., 10th digit
+    warning('negF:anova', ['Negative F-values can be due to rounding errors when the SS of one factor '...
+        'is actually zero!\nThis can happen, for instance, when you normalize your data.'])
+end
 
 %% Display results
 if nargin < 2, names = {'IV1' 'IV2'}; end

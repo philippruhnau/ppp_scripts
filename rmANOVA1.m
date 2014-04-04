@@ -7,7 +7,7 @@ function results = rmANOVA1(data)
 %	data - subjects x conditions
 %
 % Reference:
-%	Bortz (1999) Statistik f�r Sozialwissenschaftler. Springer Verlag
+%	Bortz (1999) Statistik fuer Sozialwissenschaftler. Springer Verlag
 %
 % Description: one-way repeated measures analysis of variance
 % ----------------------------------------------------------------

@@ -59,7 +59,7 @@ data.roi_mask = ft_volumelookup(cfg, data);
 data.roi_mask = double(data.roi_mask);
 
 % get indices and name
-data.roi_ind  = find(data.roi_mask(data.inside)==1);
+data.roi_ind  = find(data.roi_mask==1);
 data.roi_name = roi;
 
 % convert data

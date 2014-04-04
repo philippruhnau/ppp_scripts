@@ -35,7 +35,7 @@ function meeg_plot_topography(cfg, data)
 
 if nargin <2,      fprintf('Error: Data vector needs to be defined.\n'); return; end
 if ~isfield(cfg, 'pos'),       fprintf('Error: Positions need to be defined.\n'); return; end
-if size(cfg.pos,2) == 2, cfg.pos(:,3) = 1; end %del_tri = 2; else del_tri = 3; end % add third row with ones for 2D and define delauney dimension
+if size(cfg.pos,2) == 2, cfg.pos(:,3) = 1; del_tri = 2; else del_tri = 3; end % add third row with ones for 2D and define delauney dimension
 if ~isfield(cfg, 'limits'),    cfg.limits     = [min(data) max(data)]; end
 if ~isfield(cfg, 'visualize'), cfg.visualize  = 'interpolate'; end
 if ~isfield(cfg, 'title'),   cfg.title    = ''; end
@@ -62,18 +62,16 @@ else % default map is blue-gray-red
 	
 end
 
-
-
-figure;
+% figure;
 if strcmp(cfg.visualize, 'points')
 	scatter3(cfg.pos(:,1), cfg.pos(:,2), cfg.pos(:,3), 3, data)
 elseif strcmp(cfg.visualize, 'interpolate')
 	if ~isfield(cfg, 'tri')
-%         if del_tri == 2
-%             tri = delaunay(cfg.pos(:,1), cfg.pos(:,2), cfg.pos(:,3));
-%         else
+        if del_tri == 3
+            tri = delaunay(cfg.pos(:,1), cfg.pos(:,2), cfg.pos(:,3));
+        else
             tri = delaunay(cfg.pos(:,1), cfg.pos(:,2));
-%         end
+        end
 	else
 		tri = cfg.tri;
 	end

@@ -220,14 +220,22 @@ results.df.AC = [results.DF.AC results.DF.Cerror];
 results.df.BC = [results.DF.BC results.DF.BCerror];
 results.df.ABC = [results.DF.ABC results.DF.BCerror];
 
+
+%% make a quick check if any negative F value
+if any(cell2mat(struct2cell(results.F))<0) % if so display warning
+    % most likely when CT and SS of a factor are equal but differ in the,
+    % e.g., 10th digit
+    warning('negF:anova', ['Negative F-values can be due to rounding errors when the SS of one factor '...
+        'is actually zero!\nThis can happen, for instance, when you normalize your data.'])
+end
 %% Display results
 if nargin < 2, names = {'IV1' 'IV2' 'IV3'}; end
 
 % display results
 disp('Two-way Analysis of Variance With Repeated Measures on One-Factor (Within -Subjects) Table.')
-fprintf('-----------------------------------------------------------------------------------\n');
+fprintf('------------------------------------------------------------------------------------\n');
 disp('SOV                           SS          df           MS             F        P ');
-fprintf('-----------------------------------------------------------------------------------\n');
+fprintf('------------------------------------------------------------------------------------\n');
 fprintf('Between-Subjects         %11.3f%10i\n',results.SS.between,results.DF.between);
 fprintf([names{1} '                      %11.3f%10i%15.3f%14.3f%9.4f\n'],results.SS.A,results.DF.A,results.MS.A,results.F.A,results.p.A);
 fprintf(['Error(' names{1} ')               %11.3f%10i%15.3f\n\n'],results.SS.Aerror,results.DF.Aerror,results.MS.Aerror);
@@ -241,9 +249,9 @@ fprintf(['Error(' names{3} ')               %11.3f%10i%15.3f\n\n'],results.SS.Ce
 fprintf([names{2} ' x ' names{3} '                %11.3f%10i%15.3f%14.3f%9.4f\n'],results.SS.BC,results.DF.BC,results.MS.BC,results.F.BC,results.p.BC);
 fprintf([names{1} ' x ' names{2} ' x ' names{3} '          %11.3f%10i%15.3f%14.3f%9.4f\n'],results.SS.ABC,results.DF.ABC,results.MS.ABC,results.F.ABC,results.p.ABC);
 fprintf(['Error(' names{2} ' x ' names{3} ')         %11.3f%10i%15.3f\n'],results.SS.BCerror,results.DF.BCerror,results.MS.BCerror);
-fprintf('---------------------------------------------------------------------------------------------------\n');
+fprintf('------------------------------------------------------------------------------------\n');
 fprintf('Total                    %11.3f%10i\n',results.SS.total,results.DF.total);
-fprintf('---------------------------------------------------------------------------------------------------\n');
+fprintf('------------------------------------------------------------------------------------\n');
 
 return
 

@@ -21,9 +21,9 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 %             0.001 are assumed 
 % factypes  - cell array, factor types 'rm' for repeated measures, 'btw' 
 %             for between subjects factor; default: {'rm'} for all factors
-% pool      - index of pooled factor(s) (CAVE: conjoint betwenn and within 
-%             subject factor pooling has not really been tested, check 
-%             your results)
+% pool      - index of pooled factor(s) (CAVE: mixed pooled between and 
+%             within subject factor pooling has not really been tested, 
+%             check your results)
 %
 % output:
 %
@@ -38,7 +38,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 %               if non significant
 %
                                                               
-% P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012-12-04
+% P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012-12-04
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -246,24 +246,6 @@ end;
 
 
 % find significant effects
-function [numSign signif sSign] = find_p_FDR(results, p, pp)
-
-
-numSign = max(find(round(p*1e10) == round(results.p*1e10)));
-if numSign ~= 0
-	signif = pp(numSign);
-	sSign  = '=';
-else
-	numSign = length(find(round(p*1e10) > round(results.p*1e10)));
-	if numSign == 0
-		signif = 0.05;
-		sSign  = '>';
-	else
-		signif = pp(numSign);
-		sSign  = '<';
-	end
-end
-
 function [numSign signif sSign] = find_p_FDR(results, p, pp)
 
 

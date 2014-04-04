@@ -1,6 +1,6 @@
 function points = time2points(x, sr, bl)
 
-% points = time2points(data, sr, bl)
+% points = time2points(x, sr, bl)
 % timepoints to datapoints
 % input:
 %

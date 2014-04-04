@@ -1,5 +1,5 @@
+function save_figure(name, resolution, loose)
 
-function save_figure(name, resolution)
 % function save_figure(name, resolution)
 % saves figures in postscipt or portable network graphic format
 % picks format based on name file extension
@@ -28,12 +28,19 @@ function save_figure(name, resolution)
 
 if nargin < 1, help save_figure; return; end
 if nargin < 2, resolution = 600; end;
-
+if nargin < 3, loose = 1; end
+    
 if ~isempty(strfind(name, 'png'))
     eval(['print -dpng -r' num2str(resolution) ' ' name]);
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'eps'))
+    if loose == 1
     eval(['print -depsc2 -painters -loose -r' num2str(resolution) ' ' name]);
+    else
+    [loc, na] = fileparts(name);
+    name = fullfile(loc, [na '_noloose.eps']);
+    eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
+    end
 %     eval(['print -depsc2 -opengl -loose -r' num2str(resolution) ' ' name]);
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'jpg'))

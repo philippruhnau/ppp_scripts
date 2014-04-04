@@ -25,7 +25,7 @@ function [stats] = plot_regress2D(x,y,cfg)
 %
 
 %1234123412341234123412341234123412341234123412341234123412341234123
-% (c) copyright P.Ruhnau, Email: mail@philipp-ruhnau.de, 2012-06-25
+% (c) copyright P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012-06-25
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

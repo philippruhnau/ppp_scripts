@@ -2,7 +2,7 @@ function h = plot_TAbyT(data,cfg)
 
 % function plot_TAbyT(data,cfg)
 % plots single trials or frequencies in a time x amplitude plot using imagesc
-% !!!evenly spaced input required!
+% !!!evenly spaced input required!!!
 %
 % Mandatory Input:
 % data         - m by n matrix (e.g., trials by timepoints)
@@ -93,6 +93,9 @@ if isfield(cfg, 'smooth')
     end
 else
     plotData = data;
+    if isfield(cfg, 'mask') % smooth also mask field if present
+        maskData = cfg.mask; 
+    end
 end
 
 % plotting the data

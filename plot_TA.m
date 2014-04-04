@@ -5,10 +5,10 @@ function plot_TA(data, sR, cfg)
 % mandatory input:
 %
 % data   - m by n array of datapoints (e.g., channels by datapoints)
-% sR     - sampling rate (used to compute x-axis)
 %
 % optional input [defaults]:
 %
+% sR     - sampling rate (used to compute x-axis)
 % cfg.baseline  - baseline start-window in ms [0], negative value assumed
 % cfg.ylim      - y-axis limits [-10 10]
 % cfg.xtime     - timepoints for the x-axis [by default computed from data,
@@ -21,10 +21,10 @@ function plot_TA(data, sR, cfg)
 % cfg.linewidth - linewidth [1 times channels]
 % cfg.linestyle - linestyle [{'-'} times channel]
 % cfg.reverse   - if 1 reverses y-axis [0]
-
+% cfg.newfig    - if 1 new figure window opens
 %
 
-% copyright (c), 2011, P. Ruhnau, email: mail@philipp-ruhnau.de, 2011-08-03
+% copyright (c), 2011, P. Ruhnau, email: mail(at)philipp-ruhnau.de, 2011-08-03
 %
 % This program is free software; you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ function plot_TA(data, sR, cfg)
 
 %% definitions
 if nargin < 1, help plot_TA; return; end
-if ~exist('sR', 'var'), error('--- sampling rate needed (sR) ---'), end
+if ~exist('sR', 'var'), sR = 1000; end
 if nargin < 3,                  cfg = []; end
 if ~isfield(cfg, 'ylim'),       cfg.ylim = [-10 10]; end
 if ~isfield(cfg, 'baseline'),    cfg.baseline = 0; end
@@ -51,6 +51,7 @@ if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
 if ~isfield(cfg, 'linewidth'),  cfg.linewidth(1:size(data,1)) = 1; end
 if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(data,1)) = {'-'}; end
 if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
+if ~isfield(cfg, 'newfig'), newfig = 1; else newfig = cfg.newfig; end
 
 if ~isfield(cfg, 'xtime'),
     xtime = -abs(cfg.baseline):1000/sR:ceil(size(data,2)*1000/sR)-abs(cfg.baseline)-1;
@@ -60,9 +61,9 @@ end
 
 %% plot definitions
 
-
-figure;
-
+if newfig
+    figure;
+end
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
@@ -99,7 +100,7 @@ if isfield(cfg, 'vline')
     for i = 1:numel(vl) % plot lines
         plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
     end
-end 
+end
 
 % lines
 for chans = 1:size(data,1)
