@@ -40,8 +40,23 @@ ws = evalin('caller','whos');
 ws_cell = struct2cell(ws);
 ws_names = ws_cell(1,:);
 
-% find the ones to be cleared and make string
-to_clear = ws_names(~ismember(ws_names, keep_items));
+% find the ones to be cleared 
+indx = false(1,numel(ws_names));
+for i = 1:numel(keep_items)
+    % compare for each item to keep to use regexp
+    match_names = regexp(ws_names, keep_items(i));
+    % find indx for items to keep    
+    temp = zeros(1,numel(match_names));
+    for i2 = 1:numel(match_names)
+        temp(i2) = ~isempty(match_names{i2});
+    end
+    % combine inds
+    indx = indx | logical(temp);
+end
+% now choose all other variables
+to_clear = ws_names(~indx);
+
+% and make string
 to_clear = sprintf(' %s', to_clear{:});
 
 % clear in caller workspace

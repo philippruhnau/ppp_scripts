@@ -10,7 +10,7 @@ function plot_TA(data, sR, cfg)
 %
 % sR     - sampling rate (used to compute x-axis)
 % cfg.baseline  - baseline start-window in ms [0], negative value assumed
-% cfg.ylim      - y-axis limits [-10 10]
+% cfg.ylim      - y-axis limits [maxabs]
 % cfg.xtime     - timepoints for the x-axis [by default computed from data,
 %                 sR and cfg.baseline]
 % cfg.marker    - m by 2 array for highlighted areas in ms
@@ -45,7 +45,7 @@ function plot_TA(data, sR, cfg)
 if nargin < 1, help plot_TA; return; end
 if ~exist('sR', 'var'), sR = 1000; end
 if nargin < 3,                  cfg = []; end
-if ~isfield(cfg, 'ylim'),       cfg.ylim = [-10 10]; end
+if ~isfield(cfg, 'ylim'),  maxabs = max(abs(data(:))); cfg.ylim = [-maxabs maxabs]; end
 if ~isfield(cfg, 'baseline'),    cfg.baseline = 0; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
 if ~isfield(cfg, 'linewidth'),  cfg.linewidth(1:size(data,1)) = 1; end
@@ -108,5 +108,6 @@ for chans = 1:size(data,1)
 end
 
 
+axis([xtime(1) xtime(end) cfg.ylim])
 
 
