@@ -75,5 +75,6 @@ end
 %% select
 tcfg = [];
 tcfg.trials = finIndx;
-data = ft_selectdata(tcfg, data);
+data = ft_redefinetrial(tcfg, data);
+% data = ft_selectdata(tcfg, data); %check whether this reorders sensors!
 

@@ -107,7 +107,8 @@ for chans = 1:size(data,1)
     ERP(chans) = plot(xtime, data(chans,:), 'Color', cfg.color{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
 end
 
-
-axis([xtime(1) xtime(end) cfg.ylim])
+if ~any(isnan(cfg.ylim)) && diff(cfg.ylim) ~= 0
+  axis([xtime(1) xtime(end) cfg.ylim])
+end
 
 

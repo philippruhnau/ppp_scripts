@@ -1,6 +1,6 @@
 function save_figure(name, resolution, loose)
 
-% function save_figure(name, resolution)
+% function save_figure(name, resolution, loose)
 % saves figures in postscipt or portable network graphic format
 % picks format based on name file extension
 %
@@ -8,6 +8,7 @@ function save_figure(name, resolution, loose)
 %
 % name       - name and place of to be saved file
 % resolution - picture resolution
+% loose      - of one using loose option for eps printing
 
 % (c) P.Ruhnau, 2013, mail@philipp-ruhnau.de
 %

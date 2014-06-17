@@ -122,13 +122,16 @@ if isfield(cfg, 'vline') % plot vertical lines
     if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
     if ~exist('vl_width', 'var'), vl_width = repmat(3,1,numel(vl)); end
     
+    % find y limits and max (to correct) for lines
+    y = ylim;
+    ymax = max(abs(y));
     % initialize color (for white lines, workaround, no clue what the
     % problem is) - otherwise white lines are exported as dark blue (to
     % .eps files only) -- BAUSTELLE
-     plot(repmat(vl(1),1,2),[max(cfg.yaxis)+0.5 0.5], 'color', [.9 .9 .9], 'lineWidth', vl_width(1)*9/10)
-     
+    plot(repmat(vl(1),1,2),[y(1)-ymax/10 y(2)+ymax/10], 'color', [.9 .9 .9], 'lineWidth', vl_width(1)*9/10)
+    
     for i = 1:numel(vl) % plot lines
-        plot(repmat(vl(i),1,2),[max(cfg.yaxis)+0.5 0.5], 'color', vl_col{i}, 'lineWidth', vl_width(i))
+        plot(repmat(vl(i),1,2),[y(1)-ymax/10 y(2)+ymax/10], 'color', vl_col{i}, 'lineWidth', vl_width(i))
     end
 end
 

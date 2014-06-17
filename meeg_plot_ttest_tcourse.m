@@ -260,6 +260,7 @@ end
 stats = struct;
 stats.utcrit  = utcrit;
 stats.btcrit  = btcrit;
+stats.fdrtcrit = fdrtcrit;
 stats.tvals = tmat;
 stats.pvals = pmat;
 stats.time = ttim/1000;

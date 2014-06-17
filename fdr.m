@@ -48,7 +48,7 @@
 % Initial revision
 %
 
-function [pID, p_masked] = fdr(pvals, q);
+function [pID, p_masked, pN] = fdr(pvals, q);
 
 p = sort(pvals(:));
 V = length(p);
@@ -66,7 +66,7 @@ if nargin < 2
     end;
 else
     pID = p(max(find(p<=I/V*q/cVID))); % standard FDR
-    %pN = p(max(find(p<=I/V*q/cVN)));  % non-parametric FDR (not used)
+    pN = p(max(find(p<=I/V*q/cVN)));  % non-parametric FDR (not used)
 end;
 if isempty(pID), pID = 0; end;
 
