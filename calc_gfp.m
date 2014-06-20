@@ -1,14 +1,17 @@
-function [GFP DIS] = calc_gfp(X, avgRef, normFac)
+function [GFP, DIS] = calc_gfp(X, avgRef, normFac)
 
-% calculates the global field power (GFP) by calculating the square root on
+% [GFP, DIS] = calc_gfp(X, avgRef, normFac)
+
+% calculates the global field power (GFP) by calculating the square root of
 % the mean of all squared differences between sensors at each timepoint
 %
 % mandatory input:
 %
 % X       - N by M matrix (sensors by timepoints)
-% avgRef  - set 0 if no average reference calculation wanted
-% normFac - normalization factor, sting, global field potential ('gfp');
-%           maximum amplitude difference ('maxdif'), or 'none'
+% avgRef  - set to 0 if no average reference calculation wanted
+% normFac - normalization factor for dissimilarity index, string, 
+%           global field potential ('gfp', default); maximum amplitude 
+%           difference ('maxdif'), or 'none'
 %
 % output:
 %
