@@ -1,4 +1,4 @@
-function plot_TA(data, cfg)
+function plot_TA(data, sR, cfg)
 
 % plot_TA(data, samplingRate, cfg) plots time-amplitude image
 %
@@ -8,19 +8,20 @@ function plot_TA(data, cfg)
 %
 % optional input [defaults]:
 %
-% cfg.ylim       - y-axis limits [maxabs]
-% cfg.xtime      - timepoints for the x-axis [by default 1:size(data,2)]
-% cfg.marker     - m by 2 array for highlighted areas in ms
-% cfg.vline      - x-values for vertical lines [none]; can be further
+% sR     - sampling rate (used to compute x-axis)
+% cfg.baseline  - baseline start-window in ms [0], negative value assumed
+% cfg.ylim      - y-axis limits [maxabs]
+% cfg.xtime     - timepoints for the x-axis [by default computed from data,
+%                 sR and cfg.baseline]
+% cfg.marker    - m by 2 array for highlighted areas in ms
+% cfg.vline     - x-values for vertical lines [none]; can be further
 %                 specified in regard to color and width for each
 %                 individual line using cfg.vline_style.color/width
-% cfg.error_area - array same size of data containing variance measure to
-%                  be plotted as shaded area around lines
-% cfg.color      - cell array of colors per line [{'k'} times channels]
-% cfg.linewidth  - linewidth [1 times channels]
-% cfg.linestyle  - linestyle [{'-'} times channel]
-% cfg.reverse    - if 1 reverses y-axis [0]
-% cfg.newfig     - if 1 new figure window opens
+% cfg.color     - cell array of colors per line [{'k'} times channels]
+% cfg.linewidth - linewidth [1 times channels]
+% cfg.linestyle - linestyle [{'-'} times channel]
+% cfg.reverse   - if 1 reverses y-axis [0]
+% cfg.newfig    - if 1 new figure window opens
 %
 
 % copyright (c), 2011, P. Ruhnau, email: mail(at)philipp-ruhnau.de, 2011-08-03
@@ -40,14 +41,12 @@ function plot_TA(data, cfg)
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
 
-% vers 20140629 - added smooth error bar area plotting (cfg.error_area)
-% vers 20140626 - removed baseline and sR, now only xtime input (or points
-% 1:length(data))
-
 %% definitions
 if nargin < 1, help plot_TA; return; end
-if nargin < 2,                  cfg = []; end
+if ~exist('sR', 'var'), sR = 1000; end
+if nargin < 3,                  cfg = []; end
 if ~isfield(cfg, 'ylim'),  maxabs = max(abs(data(:))); cfg.ylim = [-maxabs maxabs]; end
+if ~isfield(cfg, 'baseline'),    cfg.baseline = 0; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
 if ~isfield(cfg, 'linewidth'),  cfg.linewidth(1:size(data,1)) = 1; end
 if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(data,1)) = {'-'}; end
@@ -55,7 +54,7 @@ if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
 if ~isfield(cfg, 'newfig'), newfig = 1; else newfig = cfg.newfig; end
 
 if ~isfield(cfg, 'xtime'),
-    xtime = 1:size(data,2);
+    xtime = -abs(cfg.baseline):1000/sR:ceil(size(data,2)*1000/sR)-abs(cfg.baseline)-1;
 else
     xtime = cfg.xtime;
 end
@@ -65,8 +64,6 @@ end
 if newfig
     figure;
 end
-
-
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
@@ -75,14 +72,13 @@ set(gca,...
 set(gcf,...
     'Color'            , [1 1 1],...
     'PaperPositionMode', 'auto');
-  
 if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
 
 hold on
 
 %% actual plotting
 
-%% grey markers
+% grey markers
 if isfield(cfg, 'marker')
     yb = cfg.ylim;
     for iM = 1:size(cfg.marker,1)
@@ -90,7 +86,7 @@ if isfield(cfg, 'marker')
     end
 end
 
-%% vertical lines
+% vertical lines
 if isfield(cfg, 'vline')
     vl = cfg.vline;
     % defaults for linecolors and -width
@@ -106,34 +102,11 @@ if isfield(cfg, 'vline')
     end
 end
 
-%% standard error
-if isfield(cfg, 'error_area')
-  for iEr = 1:size(cfg.error_area, 1)
-    se = cfg.error_area(iEr,:);
-    se_col = cfg.color{iEr};
-
-    % create y edge of poligon
-    % take higher edge first and then add lower edge flipped (cause it
-    % takes successive points)
-    eb_area = [data(iEr,:)+se fliplr(data(iEr,:)-se)]';
-    % create x-vals in same order
-    xvals = [xtime fliplr(xtime)]';   
-       
-    % now fill areas around final curve (dunno, but patch seems to do the
-    % same)
-%           fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
-    patch(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
-  end
-end
-
-
-
-%% data lines
+% lines
 for chans = 1:size(data,1)
     ERP(chans) = plot(xtime, data(chans,:), 'Color', cfg.color{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
 end
 
-%% adjust axis if possible
 if ~any(isnan(cfg.ylim)) && diff(cfg.ylim) ~= 0
   axis([xtime(1) xtime(end) cfg.ylim])
 end

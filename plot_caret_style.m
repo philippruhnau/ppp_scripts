@@ -17,7 +17,7 @@ function caml = plot_caret_style(name, resolution, material_mode, view_angle)
 %                 material function (default: a mixture between 'dull' and
 %                 'shiny')
 % view_angle - 'right', 'left', 'occipital', 'frontal', 'dorsal',
-%              'ventral', or 'all' (default: 'all')
+%              'ventral', 'all' (default), or 2D coordinates [x y]
 %
 % Output:
 % caml - camera light pointer (in case you want to move the image
@@ -47,8 +47,17 @@ end
 view(90,0),
 % create camlight
 caml = camlight('left');
-  
-%% now go through different view modes
+
+%% go to self selected angle
+if isnumeric(view_angle)
+  %% start at the right
+  view(view_angle),
+  % create camlight
+  camlight(caml, 'left');
+  save_name = [name '_other.png'];
+  eval(['print -dpng -r' num2str(resolution) ' ' save_name]);
+end
+%% or go through different view modes
 if strcmp(view_angle, 'right') || strcmp(view_angle, 'all')
   %% start at the right
   view(90,0),
