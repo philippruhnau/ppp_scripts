@@ -7,9 +7,14 @@ function h = plot_TAbyT(data,cfg)
 % Mandatory Input:
 % data         - m by n matrix (e.g., trials by timepoints)
 %
+% either the first two or the second needs to be present
+% cfg.sr       - sampling rate (used for x-axis calculation)
+% cfg.baseline - baseline (used for x-axis calculation)
+% OR
+% cfg.xtime    - vector of timepoints [calculated from data-length, sr and baseline]
+%
 %
 % Optional [defaults]:
-% cfg.xtime    - vector of timepoints [1:size(data,2)]
 % cfg.newfig   - if true opens new figure [true]
 % cfg.clim     - color limits [maxmin]
 % cfg.yaxis    - vector of y axis points [default: 1:size(data,1)
@@ -18,7 +23,6 @@ function h = plot_TAbyT(data,cfg)
 %                specified in regard to color and width (see lines 58-71)
 %                using cfg.vline_style.color/width
 % cfg.colorbar - define (any value) if colorbar plotting intended 
-% cfg.fontsize - numeric, fontsize [14]
 % cfg.yreverse - set to false, if increasing y-axis values are desired 
 % cfg.mask     - m by n matrix (same as data) used to mask, e.g.,
 %                non-significant values, translates to the alpha level in
@@ -45,20 +49,22 @@ function h = plot_TAbyT(data,cfg)
 % version 20131202 - mask parameter added (transparency)
 % version 20130808 - smoothing procedure changed, iterpolation
 
-
-if nargin < 2, cfg = []; end
-% defaults
 if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
-if ~isfield(cfg, 'xtime'), cfg.xtime = 1:size(data, 2); end
+
+if ~isfield(cfg, 'xtime'),
+    sR = cfg.sr;
+    bl = cfg.baseline;
+    cfg.xtime = -abs(bl):1000/sR:ceil(size(data,2)*1000/sR)-abs(bl)-1;
+end
 % if no caption for y axis, take number (of, e.g., trials)
 if ~isfield(cfg, 'yaxis'), cfg.yaxis = 1:size(data,1); end
 % if no value here, have y-axis direction normal (increasing)
 if ~isfield(cfg, 'yreverse'), cfg.yreverse = true; end
 % convert logicals to doubles (just in case)
-if isfield(cfg, 'mask'), cfg.mask = double(cfg.mask); end
-% 
-if isfield(cfg, 'fontsize'), fsize = cfg.fontsize; else fsize = 14; end
+if isfield(cfg, 'mask'), 
+    cfg.mask = double(cfg.mask);
+end
 
 if cfg.newfig == 1
     h = figure;
@@ -70,7 +76,7 @@ set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
     'YColor'       , [0 0 0], ...
-    'FontSize',         fsize,...
+    'FontSize',         14,...
     'Layer'        , 'top');
 
 set(gcf,...

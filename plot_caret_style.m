@@ -53,7 +53,7 @@ if isnumeric(view_angle)
   %% start at the right
   view(view_angle),
   % create camlight
-  camlight(caml, 'left');
+  camlight(caml, 'headlight');
   save_name = [name '_other.png'];
   eval(['print -dpng -r' num2str(resolution) ' ' save_name]);
 end
