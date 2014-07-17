@@ -12,11 +12,12 @@ function plot_TA(data, cfg)
 % cfg.xtime      - timepoints for the x-axis [by default 1:size(data,2)]
 % cfg.marker     - m by 2 array for highlighted areas in ms
 % cfg.vline      - x-values for vertical lines [none]; can be further
-%                 specified in regard to color and width for each
-%                 individual line using cfg.vline_style.color/width
+%                  specified in regard to color and width for each
+%                  individual line using cfg.vline_style.color/width
 % cfg.error_area - array same size of data containing variance measure to
 %                  be plotted as shaded area around lines
-% cfg.color      - cell array of colors per line [{'k'} times channels]
+% cfg.color      - cell array of colors per line [{'k'} times channels], or
+%                  colormap (n by 3 matrix)
 % cfg.linewidth  - linewidth [1 times channels]
 % cfg.linestyle  - linestyle [{'-'} times channel]
 % cfg.reverse    - if 1 reverses y-axis [0]
@@ -49,6 +50,13 @@ if nargin < 1, help plot_TA; return; end
 if nargin < 2,                  cfg = []; end
 if ~isfield(cfg, 'ylim'),  maxabs = max(abs(data(:))); cfg.ylim = [-maxabs maxabs]; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
+if ~iscell(cfg.color) % if colormap as input 
+  for i = 1:size(cfg.color,1)  
+    colors{i} = cfg.color(i,:); 
+  end
+else % if already
+  colors = cfg.color;
+end
 if ~isfield(cfg, 'linewidth'),  cfg.linewidth(1:size(data,1)) = 1; end
 if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(data,1)) = {'-'}; end
 if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
@@ -110,7 +118,7 @@ end
 if isfield(cfg, 'error_area')
   for iEr = 1:size(cfg.error_area, 1)
     se = cfg.error_area(iEr,:);
-    se_col = cfg.color{iEr};
+    se_col = colors{iEr};
 
     % create y edge of poligon
     % take higher edge first and then add lower edge flipped (cause it
@@ -122,7 +130,8 @@ if isfield(cfg, 'error_area')
     % now fill areas around final curve (dunno, but patch seems to do the
     % same)
 %           fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
-    patch(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
+     patch(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
+
   end
 end
 
@@ -130,7 +139,7 @@ end
 
 %% data lines
 for chans = 1:size(data,1)
-    ERP(chans) = plot(xtime, data(chans,:), 'Color', cfg.color{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
+    ERP(chans) = plot(xtime, data(chans,:), 'Color', colors{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
 end
 
 %% adjust axis if possible
