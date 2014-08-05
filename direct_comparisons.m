@@ -35,7 +35,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 % ps          - uncorrected p-values of all individual comparisons (rounded
 %               to the fourth decimal)
 % pw_matrix   - pairwise comparison matrix, shows significance level or 1,
-%               if non significant
+%               if not significant
 %
                                                               
 % P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012-12-04
@@ -62,8 +62,6 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 
 if nargin < 2,  p = []; end
 if ~exist('factypes', 'var') || isempty(factypes), factypes = repmat({'rm'}, 1, size(X,2)-2); end
-
-warning('prToolbox:removedSubCol', '\nThe subject column is deprecated and was removed, \ncheck if your data fits the required input')
 
 % extract data
 data = X(:,1);
@@ -152,16 +150,34 @@ else
 p_level = [0.05, 0.01 0.001];
 end
 
+%% to be printed contrast (select the sensible ones only) but base fdr on all contrast!
+% output matrix
 pw_matrix = NaN(size(levels,1));
-for icomp = 1:size(comparison,2) % print reslts
+% find relevant contrast
+main_fac = false(size(level_contrasts));
+% find valid contrast within each main effect
+% only if at least one of the main effects is stable (i.e., equal) the 
+% contrast is valid
+if size(levels,2) > 1
+  for i = 1:size(level_contrasts,1)
+    main_fac(i,:) = levels(level_contrasts(i,1),:) == levels(level_contrasts(i,2),:);
+  end
+  main_fac = find(sum(main_fac,2))';
+else
+  % if only one factor show all contrasts
+  main_fac = 1:size(level_contrasts,1);
+end
+
+disp('Printing valid contrasts only, at least one main effect stable')
+for icomp = main_fac %1:size(comparison,2) % print reslts of relevant only
     eta2 = comparison{icomp}.SS.effect ./ comparison{icomp}.SS.total;
     [numSign signif sSign] = find_p_FDR(comparison{icomp}, p_fdr,p_level);
-    fprintf('Contrast: %.0f vs. %.0f - F(%.0f,%.0f) = %.2f, p %s %.3f, eta=%.3f \n',...
-        level_contrasts(icomp,1), level_contrasts(icomp,2), comparison{icomp}.df(1), comparison{icomp}.df(2), comparison{icomp}.F, sSign, signif, eta2);
-    if strcmp(sSign, '>') % pairwise matrix
-        pw_matrix(level_contrasts(icomp,1), level_contrasts(icomp,2)) = 1.000;
+    fprintf('Contrast: %.0f vs. %.0f - F(%.0f,%.0f) = %.2f, p %s %.3f, p_uc = %.4f, eta=%.3f \n',...
+        level_contrasts(icomp,1), level_contrasts(icomp,2), comparison{icomp}.df(1), comparison{icomp}.df(2), comparison{icomp}.F, sSign, signif, comparison{icomp}.p, eta2);
+    if strcmp(sSign, '>') % pairwise matrix, fill lower triangle
+        pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = 1.000;
     else
-        pw_matrix(level_contrasts(icomp,1), level_contrasts(icomp,2)) = signif;
+        pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = signif;
     end
 end
 

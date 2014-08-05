@@ -1,6 +1,6 @@
 function ws_sum_gb
 
-% function [si_who] = ws_sum_gb(whos)
+% function [si_who] = ws_sum_gb
 % calculates current working memory size in GB
 
 % copyright (c), 2014, P. Ruhnau, email: mail(at)philipp-ruhnau.de, 2014-04-04

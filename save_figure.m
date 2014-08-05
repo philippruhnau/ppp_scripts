@@ -36,11 +36,9 @@ if ~isempty(strfind(name, 'png'))
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'eps'))
     if loose == 1
-    eval(['print -depsc2 -painters -loose -r' num2str(resolution) ' ' name]);
+      eval(['print -depsc2 -painters -loose -r' num2str(resolution) ' ' name]);
     else
-    [loc, na] = fileparts(name);
-    name = fullfile(loc, [na '_noloose.eps']);
-    eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
+      eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
     end
 %     eval(['print -depsc2 -opengl -loose -r' num2str(resolution) ' ' name]);
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
