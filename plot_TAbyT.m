@@ -2,7 +2,6 @@ function h = plot_TAbyT(data,cfg)
 
 % function plot_TAbyT(data,cfg)
 % plots single trials or frequencies in a time x amplitude plot using imagesc
-% !!!evenly spaced input required!!!
 %
 % Mandatory Input:
 % data         - m by n matrix (e.g., trials by timepoints)
@@ -42,10 +41,11 @@ function h = plot_TAbyT(data,cfg)
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
 
+% version 20140814 - non-linear axes now possible (still beta)
 % version 20131202 - mask parameter added (transparency)
 % version 20130808 - smoothing procedure changed, iterpolation
 
-
+%% definitions
 if nargin < 2, cfg = []; end
 % defaults
 if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
@@ -65,7 +65,8 @@ if cfg.newfig == 1
 else
     h = gcf;
 end
-% general plot definitions
+
+%% general plot definitions
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
@@ -78,34 +79,57 @@ set(gcf,...
     'PaperPositionMode', 'auto');
 
 
-% smoothing
+%% smoothing
 if isfield(cfg, 'smooth')
-    %% do smoothing now with interpolation
+    % do smoothing now with interpolation
     plotData = interp2(data,cfg.smooth);
     if isfield(cfg, 'mask') % smooth also mask field if present
         maskData = interp2(cfg.mask,cfg.smooth); 
     end
 else
     plotData = data;
-    if isfield(cfg, 'mask') % smooth also mask field if present
+    if isfield(cfg, 'mask') 
         maskData = cfg.mask; 
     end
 end
 
-% plotting the data
-imagesc(cfg.xtime,cfg.yaxis,plotData, [cfg.clim])
-hold on;
+%% check whether y-axis is linear, if not, check number of y-ticks and 
+% replace based on input
+if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6)
+  % plotting the data without yaxis input (just uses bins)
+  imagesc(cfg.xtime,[],plotData, [cfg.clim])
+  hold on;
+  % get positions of ytics in linear array (must be same size as data!)
+  yticks = get(gca, 'YTick'); 
+  % normalize by y-size in data and multiply on y-axis length and round (but
+  % only for indexing)
+  % necessary when interpolating 
+  ypos = yticks / size(plotData,1) * numel(cfg.yaxis);
+  set(gca,'YTickLabel',round(cfg.yaxis(round(ypos)).*10)./10)
 
+  if any(mod(ypos,1))
+  warning('plotTAbyT:non_integers_in_index', ...
+    ['Non-linear axis together with smoothing might result in wrong y-axis tick-labels, '...
+    'better double check using no smoothing!'])
+  end
+else % for linearly spaced y-axis just do this
+  % plot data with yaxis input
+  imagesc(cfg.xtime,cfg.yaxis,plotData, [cfg.clim])
+  hold on;
+end
+
+%% masking
 if isfield(cfg, 'mask')
     % set alpha according to mask field
     alpha(maskData);
 end
 
-% have Y-axis normal (increasing values, default)
+%% have Y-axis normal (increasing values, default)
 if cfg.yreverse == true
 set(gca, 'YDir', 'normal')
 end
 
+%% vertical lines
 if isfield(cfg, 'vline') % plot vertical lines
     vl = cfg.vline;
     % defaults for linecolors and -width
@@ -129,7 +153,7 @@ if isfield(cfg, 'vline') % plot vertical lines
     end
 end
 
-
+%% colorbar
 if isfield(cfg, 'colorbar') 
     if cfg.colorbar == 1
     colorbar

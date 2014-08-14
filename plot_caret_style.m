@@ -54,7 +54,7 @@ if isnumeric(view_angle)
   view(view_angle),
   % create camlight
   camlight(caml, 'headlight');
-  save_name = [name '_other.png'];
+  save_name = [name '.png'];
   eval(['print -dpng -r' num2str(resolution) ' ' save_name]);
 end
 %% or go through different view modes
