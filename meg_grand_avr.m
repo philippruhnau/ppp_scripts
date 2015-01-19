@@ -1,4 +1,4 @@
-function [data cfg] = meg_grand_avr(cfg)
+function [data, cfg] = meg_grand_avr(cfg)
 
 % function [data] = meg_grand_avr(cfg)
 % computes grand average over subjects (fif files)

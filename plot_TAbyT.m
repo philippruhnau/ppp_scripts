@@ -11,7 +11,7 @@ function h = plot_TAbyT(data,cfg)
 % cfg.xtime    - vector of timepoints [1:size(data,2)]
 % cfg.newfig   - if true opens new figure [true]
 % cfg.clim     - color limits [maxmin]
-% cfg.yaxis    - vector of y axis points [default: 1:size(data,1)
+% cfg.yaxis    - vector of y axis points [default: 1:size(data,1)]
 % cfg.smooth   - numeric, smoothing iterations (interpolation)
 % cfg.vline    - x-values for vertical lines [none]; can be further
 %                specified in regard to color and width (see lines 58-71)
@@ -93,8 +93,7 @@ else
     end
 end
 
-%% check whether y-axis is linear, if not, check number of y-ticks and 
-% replace based on input
+%% check whether y-axis is linear, if not adapt y-tick-labels
 if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6)
   % plotting the data without yaxis input (just uses bins)
   imagesc(cfg.xtime,[],plotData, [cfg.clim])

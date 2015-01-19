@@ -6,25 +6,28 @@ function plot_axes(cfg)
 %	cfg.lims        - limits of the axis [xmin xmax ymin ymax]
 %
 % Optional inputs (defaults):
-%	cfg.color       = 'k';
-%	cfg.line_width  = 2;
-%	cfg.origin      = [0 0]; % center/origin of the cross hair
-%	cfg.tick_steps  = [NaN NaN]; % steps of the ticks [x y], e.g. [100 2] or [NaN NaN] for no ticks
-%	cfg.tick_length - line length of the ticks [x y], e.g. [0.2 6], default = 1% of the xyaxis respcetively.
-%	cfg.xtick_type  = 'both'; % 'both', 'upper', 'lower'
-%   cfg.xtick_text  = cell of strings, replace numeric values
-%	cfg.ytick_type  = 'both'; % 'both', 'left', 'right'
-%	cfg.font_size   = 15;
-%	cfg.font_weight = 'normal'; % 'light', 'normal', 'demi', 'bold'
-%	cfg.xtext_pos   = 'below'; % 'below', 'above'
-%	cfg.ytext_pos   = 'left'; % 'left', 'right'
-%	cfg.xlabel      = ''; % e.g. 'ms'
-%	cfg.ylabel      = ''; % e.g. 'fT'
-%   cfg.ylabel_rot  = [0]; rotation angle of ylabel text
-%	cfg.text_dis    = [0 0]; % distance for the text away from the tick [x y], e.g. [0.1 6]
-%	cfg.xexclude    = [cfg.origin(1)]; % exclude these x-numbers from
-%	plotting as text
-%	cfg.yexclude    = [cfg.origin(2)]; % exclude these y-numbers from plotting as text
+% cfg.color       = 'k';
+% cfg.line_width  = 2;
+% cfg.origin      = [0 0]; % center/origin of the cross hair
+% cfg.tick_steps  = [NaN NaN]; % steps of the ticks [x y], e.g. [100 2] or 
+%                   [NaN NaN] for no ticks
+% cfg.tick_length = line length of the ticks [x y], e.g. [0.2 6], 
+%                   default = 1% of the xyaxis respcetively.
+% cfg.xtick_type  = 'both'; % 'both', 'upper', 'lower'
+% cfg.xtick_text  = cell of strings, replace numeric values
+% cfg.ytick_type  = 'both'; % 'both', 'left', 'right'
+% cfg.font_size   = 15;
+% cfg.font_weight = 'normal'; % 'light', 'normal', 'demi', 'bold'
+% cfg.xtext_pos   = 'below'; % 'below', 'above'
+% cfg.ytext_pos   = 'left'; % 'left', 'right'
+% cfg.xlabel      = ''; % e.g. 'ms'
+% cfg.ylabel      = ''; % e.g. 'fT'
+% cfg.ylabel_rot  = [0]; rotation angle of ylabel text
+% cfg.text_dis    = [0 0]; % distance for the text away from the tick [x y]
+%                   , e.g. [0.1 6]
+% cfg.xexclude    = [cfg.origin(1)]; % exclude these x-numbers from
+%                   plotting as text
+% cfg.yexclude    = [cfg.origin(2)]; % exclude these y-numbers from plotting as text
 %
 % Note: Many of the parameters use the unit of the x-axis or the y-axis.
 % Furthermore, when using reversed axes you need to reverse them before
