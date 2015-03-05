@@ -8,7 +8,7 @@ function h = plot_TAbyT(data,cfg)
 %
 %
 % Optional [defaults]:
-% cfg.xtime    - vector of timepoints [1:size(data,2)]
+% cfg.xaxis    - vector of timepoints [1:size(data,2)]
 % cfg.newfig   - if true opens new figure [true]
 % cfg.clim     - color limits [maxmin]
 % cfg.yaxis    - vector of y axis points [default: 1:size(data,1)]
@@ -45,16 +45,17 @@ function h = plot_TAbyT(data,cfg)
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 %
 
-% version 20180205 - non-linear axes now possible
+% version 20150205 - non-linear axes now possible
 % version 20131202 - mask parameter added (transparency)
-% version 20130808 - smoothing procedure changed, iterpolation
+% version 20130808 - smoothing procedure changed, interpolation
 
 %% definitions
 if nargin < 2, cfg = []; end
 % defaults
 if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
-if ~isfield(cfg, 'xtime'), cfg.xtime = 1:size(data, 2); end
+if ~isfield(cfg, 'xaxis'), cfg.xaxis = 1:size(data, 2); end
+if isfield(cfg, 'xtime'), cfg.xaxis = cfg.xtime; warning('cfg.xtime field is deprecated and replaced by cfg.xaxis'); end
 % if no caption for y axis, take number (of, e.g., trials)
 if ~isfield(cfg, 'yaxis'), cfg.yaxis = 1:size(data,1); end
 % if no value here, have y-axis direction normal (increasing)
@@ -116,7 +117,7 @@ if isfield(cfg, 'smooth')
   % do smoothing now with interpolation
   plotData = interp2(data,cfg.smooth);
   if isfield(cfg, 'mask') % smooth also mask field if present
-    maskData = interp2(cfg.mask,cfg.smooth);
+    maskData = interp2(cfg.mask,cfg.smooth, 'nearest');
   end
 else
   plotData = data;
@@ -128,7 +129,7 @@ end
 %% check whether y-axis is linear, if not adapt y-tick-labels
 if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6) % watch it in case you go small!
   % plotting the data without yaxis input (just uses bins)
-  imagesc(cfg.xtime,[],plotData, [cfg.clim])
+  imagesc(cfg.xaxis,[],plotData, [cfg.clim])
   hold on;
   
   % get size of y-axis
@@ -142,7 +143,7 @@ if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6) % watch it in case you go small!
   
 else % for linearly spaced y-axis just do this
   % plot data with yaxis input
-  imagesc(cfg.xtime,cfg.yaxis,plotData, [cfg.clim])
+  imagesc(cfg.xaxis,cfg.yaxis,plotData, [cfg.clim])
   hold on;
 end
 

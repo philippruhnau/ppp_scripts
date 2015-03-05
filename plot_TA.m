@@ -1,6 +1,6 @@
 function plot_TA(data, cfg)
 
-% plot_TA(data, samplingRate, cfg) plots time-amplitude image
+% plot_TA(data, cfg) plots time-amplitude image
 %
 % mandatory input:
 %
@@ -9,7 +9,7 @@ function plot_TA(data, cfg)
 % optional input [defaults]:
 %
 % cfg.ylim       - y-axis limits [maxabs]
-% cfg.xtime      - timepoints for the x-axis [by default 1:size(data,2)]
+% cfg.xaxis      - points for the x-axis [by default 1:size(data,2)]
 % cfg.marker     - m by 2 array for highlighted areas in ms
 % cfg.vline      - x-values for vertical lines [none]; can be further
 %                  specified in regard to color and width for each
@@ -48,6 +48,7 @@ function plot_TA(data, cfg)
 %% definitions
 if nargin < 1, help plot_TA; return; end
 if nargin < 2,                  cfg = []; end
+if isfield(cfg, 'xtime'), cfg.xaxis = cfg.xtime; warning('cfg.xtime field is deprecated and replaced by cfg.xaxis'); end
 if ~isfield(cfg, 'ylim'),  maxabs = max(abs(data(:))); cfg.ylim = [-maxabs maxabs]; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
 if ~iscell(cfg.color) % if colormap as input 
@@ -62,10 +63,10 @@ if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(data,1)) = {'-'}; end
 if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
 if ~isfield(cfg, 'newfig'), newfig = 1; else newfig = cfg.newfig; end
 
-if ~isfield(cfg, 'xtime'),
+if ~isfield(cfg, 'xaxis'),
     xtime = 1:size(data,2);
 else
-    xtime = cfg.xtime;
+    xtime = cfg.xaxis;
 end
 
 %% plot definitions
