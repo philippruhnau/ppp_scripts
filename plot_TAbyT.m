@@ -26,6 +26,8 @@ function h = plot_TAbyT(data,cfg)
 % cfg.mask     - m by n matrix (same as data) used to mask, e.g.,
 %                non-significant values, translates to the alpha level in
 %                matlab (0 = completely transparent; 1 = no transparency)
+% cfg.mask_int - 'nearest', 'linear', or 'spline' - way of interpolating
+%                the mask field ['nearest']
 %
 
 % (c) P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012
@@ -117,7 +119,11 @@ if isfield(cfg, 'smooth')
   % do smoothing now with interpolation
   plotData = interp2(data,cfg.smooth);
   if isfield(cfg, 'mask') % smooth also mask field if present
-    maskData = interp2(cfg.mask,cfg.smooth, 'nearest');
+    if isfield(cfg, 'mask_int')
+      maskData = interp2(cfg.mask,cfg.smooth, cfg.mask_int);
+    else
+      maskData = interp2(cfg.mask,cfg.smooth, 'nearest');
+    end
   end
 else
   plotData = data;
