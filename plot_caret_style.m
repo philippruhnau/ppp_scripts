@@ -32,9 +32,15 @@ if nargin < 4
   view_angle = 'all';
 end
 if nargin < 5
-  safe_figure = 1;
+  save_figure = 1;
 end
 
+%% user feedback
+if save_figure == 1
+  disp(' --- ')
+  disp('Saving output files')
+  disp(' --- ')
+end
 %% make image bigger bigger (twice seems to be a nice size in the end)
 for i = 1:2
   set(gca, 'Position', get(gca, 'OuterPosition'))
