@@ -101,18 +101,6 @@ else
   h = gcf;
 end
 
-%% general plot definitions
-set(gca,...
-  'Box'          , 'off'     , ...
-  'XColor'       , [0 0 0], ...
-  'YColor'       , [0 0 0], ...
-  'FontSize',         fsize,...
-  'Layer'        , 'top');
-
-set(gcf,...
-  'Color'            , [1 1 1],...
-  'PaperPositionMode', 'auto');
-
 
 %% smoothing
 if isfield(cfg, 'smooth')
@@ -135,7 +123,7 @@ end
 %% check whether y-axis is linear, if not adapt y-tick-labels
 if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6) % watch it in case you go small!
   % plotting the data without yaxis input (just uses bins)
-  imagesc(cfg.xaxis,[],plotData, [cfg.clim])
+  imagesc(cfg.xaxis,[],plotData, [cfg.clim]);
   hold on;
   
   % get size of y-axis
@@ -187,6 +175,18 @@ if isfield(cfg, 'vline') % plot vertical lines
     plot(repmat(vl(i),1,2),[y(1)-ymax/10 y(2)+ymax/10], 'color', vl_col{i}, 'lineWidth', vl_width(i))
   end
 end
+
+%% general plot definitions
+set(gca,...
+  'Box'          , 'on'     , ...
+  'XColor'       , [0 0 0], ...
+  'YColor'       , [0 0 0], ...
+  'FontSize',         fsize,...
+  'Layer'        , 'top');
+
+set(gcf,...
+  'Color'            , [1 1 1],...
+  'PaperPositionMode', 'auto');
 
 %% colorbar
 if isfield(cfg, 'colorbar')

@@ -263,7 +263,7 @@ stats.btcrit  = btcrit;
 stats.fdrtcrit = fdrtcrit;
 stats.tvals = tmat;
 stats.pvals = pmat;
-stats.time = ttim/1000;
+stats.time = ttim;
 
 
 return;
