@@ -76,17 +76,6 @@ if newfig
 end
 
 
-set(gca,...
-    'Box'          , 'off'     , ...
-    'XColor'       , [0 0 0], ...
-    'YColor'       , [0 0 0], ...
-    'Layer'        , 'top');
-set(gcf,...
-    'Color'            , [1 1 1],...
-    'PaperPositionMode', 'auto');
-  
-if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
-
 hold on
 
 %% actual plotting
@@ -96,22 +85,6 @@ if isfield(cfg, 'marker')
     yb = cfg.ylim;
     for iM = 1:size(cfg.marker,1)
         fill([cfg.marker(iM,1) cfg.marker(iM,1) cfg.marker(iM,2) cfg.marker(iM,2)], [yb(1) yb(2) yb(2) yb(1)], [0.9 0.9 0.9], 'EdgeColor', 'none');
-    end
-end
-
-%% vertical lines
-if isfield(cfg, 'vline')
-    vl = cfg.vline;
-    % defaults for linecolors and -width
-    if isfield(cfg, 'vline_style')
-        if isfield(cfg.vline_style, 'color'); vl_col = cfg.vline_style.color; end
-        if isfield(cfg.vline_style, 'width'); vl_width = cfg.vline_style.width; end
-    end
-    if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
-    if ~exist('vl_width', 'var'), vl_width = repmat(2,1,numel(vl)); end
-    
-    for i = 1:numel(vl) % plot lines
-        plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
     end
 end
 
@@ -136,12 +109,38 @@ if isfield(cfg, 'error_area')
   end
 end
 
-
-
 %% data lines
 for chans = 1:size(data,1)
     ERP(chans) = plot(xtime, data(chans,:), 'Color', colors{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
 end
+
+%% vertical lines
+if isfield(cfg, 'vline')
+    vl = cfg.vline;
+    % defaults for linecolors and -width
+    if isfield(cfg, 'vline_style')
+        if isfield(cfg.vline_style, 'color'); vl_col = cfg.vline_style.color; end
+        if isfield(cfg.vline_style, 'width'); vl_width = cfg.vline_style.width; end
+    end
+    if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
+    if ~exist('vl_width', 'var'), vl_width = repmat(2,1,numel(vl)); end
+    
+    for i = 1:numel(vl) % plot lines
+        plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
+    end
+end
+%% default adjustments
+set(gca,...
+    'Box'          , 'off'     , ...
+    'XColor'       , [0 0 0], ...
+    'YColor'       , [0 0 0], ...
+    'Layer'        , 'top');
+set(gcf,...
+    'Color'            , [1 1 1],...
+    'PaperPositionMode', 'auto');
+  
+if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
+
 
 %% adjust axis if possible
 if ~any(isnan(cfg.ylim)) && diff(cfg.ylim) ~= 0
