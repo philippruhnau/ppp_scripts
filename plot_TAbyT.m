@@ -194,6 +194,3 @@ if isfield(cfg, 'colorbar')
     colorbar
   end
 end
-
-
-%% helper
