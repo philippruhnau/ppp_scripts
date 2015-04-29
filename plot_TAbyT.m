@@ -56,6 +56,7 @@ if nargin < 2, cfg = []; end
 % defaults
 if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
+% check whether caxis increases, otherwise crash
 if ~isfield(cfg, 'xaxis'), cfg.xaxis = 1:size(data, 2); end
 if isfield(cfg, 'xtime'), cfg.xaxis = cfg.xtime; warning('cfg.xtime field is deprecated and replaced by cfg.xaxis'); end
 % if no caption for y axis, take number (of, e.g., trials)
@@ -64,8 +65,8 @@ if ~isfield(cfg, 'yaxis'), cfg.yaxis = 1:size(data,1); end
 if ~isfield(cfg, 'yreverse'), cfg.yreverse = true; end
 % convert logicals to doubles (just in case)
 if isfield(cfg, 'mask'), cfg.mask = double(cfg.mask); end
-%
 if isfield(cfg, 'fontsize'), fsize = cfg.fontsize; else fsize = 14; end
+% check whether caxis increases, otherwise crash
 
 % default number of tics
 if ~isfield(cfg, 'n_ytick'),
@@ -123,9 +124,10 @@ end
 %% check whether y-axis is linear, if not adapt y-tick-labels
 if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6) % watch it in case you go small!
   % plotting the data without yaxis input (just uses bins)
-  imagesc(cfg.xaxis,[],plotData, [cfg.clim]);
+  imagesc(cfg.xaxis,[],plotData);
   hold on;
-  
+  % set the color limit 
+  caxis([cfg.clim])
   % get size of y-axis
   ySize = get(gca, 'YLim');
   % set equidistant points according to n_tick and y-axis size
@@ -137,8 +139,10 @@ if any(round(diff(diff(cfg.yaxis)).*1e6)./1e6) % watch it in case you go small!
   
 else % for linearly spaced y-axis just do this
   % plot data with yaxis input
-  imagesc(cfg.xaxis,cfg.yaxis,plotData, [cfg.clim])
+  imagesc(cfg.xaxis,cfg.yaxis,plotData)
   hold on;
+  % set the color limit 
+  caxis([cfg.clim])
 end
 
 %% masking

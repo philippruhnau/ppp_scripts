@@ -1,6 +1,6 @@
 function plot_TA(data, cfg)
 
-% plot_TA(data, cfg) plots time-amplitude image
+% PLOT_TA(data, cfg) plots time-amplitude image
 %
 % mandatory input:
 %
@@ -72,7 +72,7 @@ end
 %% plot definitions
 
 if newfig
-    figure;
+   figure;
 end
 
 

@@ -1,6 +1,6 @@
 function h = plot_errorbars(data, cfg)
 
-% function h = plot_errorbars(cfg,data)
+% function h = plot_errorbars(data, cfg)
 %
 % plots error bars of different conditions
 %
