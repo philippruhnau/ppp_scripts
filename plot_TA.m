@@ -16,8 +16,12 @@ function plot_TA(data, cfg)
 %                  individual line using cfg.vline_style.color/width
 % cfg.error_area - array same size of data containing variance measure to
 %                  be plotted as shaded area around lines
-% cfg.color      - cell array of colors per line [{'k'} times channels], or
-%                  colormap (n by 3 matrix)
+% cfg.error_edge - set to 1 if you want edges around the area [0] sets
+%                  dashed lines to where the error areas overlap (not
+%                  visible with transparancy but essential when saving as
+%                  vector graphic, eps)
+% cfg.color      - cell array of colors per line, or colormap (m by 3
+%                  matrix) [[0 0 0] = black for all]
 % cfg.linewidth  - linewidth [1 times channels]
 % cfg.linestyle  - linestyle [{'-'} times channel]
 % cfg.reverse    - if 1 reverses y-axis [0]
@@ -50,95 +54,115 @@ if nargin < 1, help plot_TA; return; end
 if nargin < 2,                  cfg = []; end
 if isfield(cfg, 'xtime'), cfg.xaxis = cfg.xtime; warning('cfg.xtime field is deprecated and replaced by cfg.xaxis'); end
 if ~isfield(cfg, 'ylim'),  maxabs = max(abs(data(:))); cfg.ylim = [-maxabs maxabs]; end
-if ~isfield(cfg, 'color'),      cfg.color(1:size(data,1)) = {'k'}; end
-if ~iscell(cfg.color) % if colormap as input 
-  for i = 1:size(cfg.color,1)  
-    colors{i} = cfg.color(i,:); 
-  end
-else % if already
-  colors = cfg.color;
-end
 if ~isfield(cfg, 'linewidth'),  cfg.linewidth(1:size(data,1)) = 1; end
 if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(data,1)) = {'-'}; end
 if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
 if ~isfield(cfg, 'newfig'), newfig = 1; else newfig = cfg.newfig; end
-
 if ~isfield(cfg, 'xaxis'),
-    xtime = 1:size(data,2);
+  xtime = 1:size(data,2);
 else
-    xtime = cfg.xaxis;
+  xtime = cfg.xaxis;
 end
+% convert color input to rgb triplets if not already
+
+
+if ~isfield(cfg, 'color'),
+  colors = repmat([0 0 0],size(data,1),1);
+elseif iscell(cfg.color) % if colormap as input
+  for i = 1:numel(cfg.color)
+    % this is pretty cool
+    colors(i,:) = bitget(find('krgybmcw'==cfg.color{i})-1,1:3);
+  end
+end
+
 
 %% plot definitions
 
 if newfig
-   figure;
+  figure;
 end
-
 
 hold on
 
 %% actual plotting
 
-%% grey markers
+%% grey markers (far background...)
 if isfield(cfg, 'marker')
-    yb = cfg.ylim;
-    for iM = 1:size(cfg.marker,1)
-        fill([cfg.marker(iM,1) cfg.marker(iM,1) cfg.marker(iM,2) cfg.marker(iM,2)], [yb(1) yb(2) yb(2) yb(1)], [0.9 0.9 0.9], 'EdgeColor', 'none');
-    end
+  yb = cfg.ylim;
+  for iM = 1:size(cfg.marker,1)
+    fill([cfg.marker(iM,1) cfg.marker(iM,1) cfg.marker(iM,2) cfg.marker(iM,2)], [yb(1) yb(2) yb(2) yb(1)], [0.9 0.9 0.9], 'EdgeColor', 'none');
+  end
 end
 
 %% standard error
 if isfield(cfg, 'error_area')
   for iEr = 1:size(cfg.error_area, 1)
     se = cfg.error_area(iEr,:);
-    se_col = colors{iEr};
-
+    se_col = colors(iEr,:);
+    
     % create y edge of poligon
     % take higher edge first and then add lower edge flipped (cause it
     % takes successive points)
     eb_area = [data(iEr,:)+se fliplr(data(iEr,:)-se)]';
     % create x-vals in same order
-    xvals = [xtime fliplr(xtime)]';   
-       
+    xvals = [xtime fliplr(xtime)]';
+    
     % now fill areas around final curve (dunno, but patch seems to do the
     % same)
-%           fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
-     patch(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
-
+    %           fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
+    patch(xvals, eb_area, 1, 'FaceColor', se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
+    
+    if isfield(cfg, 'error_edge') && cfg.error_edge
+      % Make nice edges around the patch. a little smaller and brighter than
+      % main lines
+      % inspired by Andreas Trier Poulsen (function mseb)
+      plot(xtime,data(iEr,:)+se,'-','color',se_col+(1-se_col)*0.5);
+      plot(xtime,data(iEr,:)-se,'-','color',se_col+(1-se_col)*0.5);
+    end
+  end
+  
+  if isfield(cfg, 'error_edge') && cfg.error_edge
+    % plot edges again for eps plotting to get dashed lines in the overlap...
+    % again inspired by Adreas Trier Poulsen
+    for iEr = 1:size(cfg.error_area, 1)
+      se = cfg.error_area(iEr,:);
+      se_col = colors(iEr,:);
+      plot(xtime,data(iEr,:)+se,'--','color',se_col+(1-se_col)*0.5);
+      plot(xtime,data(iEr,:)-se,'--','color',se_col+(1-se_col)*0.5);
+    end
   end
 end
 
-%% data lines
+%% data lines (need to be plotted last to be 'on top' of errorbars)
 for chans = 1:size(data,1)
-    ERP(chans) = plot(xtime, data(chans,:), 'Color', colors{chans}, 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
+  ERP(chans) = plot(xtime, data(chans,:), 'Color', colors(chans,:), 'LineWidth', cfg.linewidth(chans), 'LineStyle', cfg.linestyle{chans}); %#ok<AGROW>
 end
 
 %% vertical lines
 if isfield(cfg, 'vline')
-    vl = cfg.vline;
-    % defaults for linecolors and -width
-    if isfield(cfg, 'vline_style')
-        if isfield(cfg.vline_style, 'color'); vl_col = cfg.vline_style.color; end
-        if isfield(cfg.vline_style, 'width'); vl_width = cfg.vline_style.width; end
-    end
-    if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
-    if ~exist('vl_width', 'var'), vl_width = repmat(2,1,numel(vl)); end
-    
-    for i = 1:numel(vl) % plot lines
-        plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
-    end
+  vl = cfg.vline;
+  % defaults for linecolors and -width
+  if isfield(cfg, 'vline_style')
+    if isfield(cfg.vline_style, 'color'); vl_col = cfg.vline_style.color; end
+    if isfield(cfg.vline_style, 'width'); vl_width = cfg.vline_style.width; end
+  end
+  if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
+  if ~exist('vl_width', 'var'), vl_width = repmat(2,1,numel(vl)); end
+  
+  for i = 1:numel(vl) % plot lines
+    plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
+  end
 end
 %% default adjustments
 set(gca,...
-    'Box'          , 'off'     , ...
-    'XColor'       , [0 0 0], ...
-    'YColor'       , [0 0 0], ...
-    'Layer'        , 'top');
+  'Box'          , 'off'     , ...
+  'XColor'       , [0 0 0], ...
+  'YColor'       , [0 0 0], ...
+  'Layer'        , 'top');
 set(gcf,...
-    'Color'            , [1 1 1],...
-    'PaperPositionMode', 'auto');
-  
+  'Color'            , [1 1 1],...
+  'PaperPositionMode', 'auto');
+
 if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
 
 
