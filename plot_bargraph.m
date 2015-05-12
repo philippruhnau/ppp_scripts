@@ -158,7 +158,7 @@ if ~any(isnan(sedata(:)))
         'Color', 'k')
     end
     % now horizontal
-    wl = cfg.eblength/2; % legth of whisker
+    wl = cfg.eblength/2; % length of whisker
     for i = 1:size(seRange,1)
       %upper
       plot([xpos(i)-wl xpos(i)+wl], [seRange(i,1) seRange(i,1)],...
