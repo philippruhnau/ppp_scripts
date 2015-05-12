@@ -1,14 +1,15 @@
-function [gammaVec gammaVecScaled gammaRaw stats] = comp_rand_gamma(cfg)
+function [gammaVec, gammaVecScaled, gammaRaw, stats] = comp_rand_gamma(cfg)
 
-% [gammaVec gammaVecScaled gammaRaw stats] = call_rand_gamma(cfg)
-% computes gamma distributed randum numbers 
+% [gammaVec, gammaVecScaled, gammaRaw, stats] = COMP_RAND_GAMMA(cfg)
+% computes gamma distributed random numbers 
+%
 % this function is calling gamrnd(a,b,n,1) and adding some extras in the
 % process (see below)
 %
 % optional input [defaults]:
 %
-% cfg.a - shape parameter a (= k) [1]
-% cfg.b - scaling parameter b (theta, or 1/beta) [1]
+% cfg.a - shape parameter a (also called k) [1]
+% cfg.b - scaling parameter b (also called theta or 1/beta) [1]
 % cfg.n - n of numbers [101]
 %
 % cfg.mean.n - number of repeated drawings [3], 'smoothens' the
@@ -16,9 +17,9 @@ function [gammaVec gammaVecScaled gammaRaw stats] = comp_rand_gamma(cfg)
 %              less likely (see below)
 % cfg.mean.method - string, 'mean' or 'median' ['mean']
 %
-% cfg.scale.val - scaling value (e.g., if distribution is normalized) 
-% cfg.stats - if set a struct may be put out, which contains the maximum,
-%             mean and variance of the created distribution
+% cfg.scale.val - scaling factor (e.g., if distribution is normalized), if
+%                 defined empty the distribution is scaled to have a
+%                 maximum of 1
 %
 
 % copyright (c), 2012, P. Ruhnau, email: mail@philipp-ruhnau.de, 2012-11-12
@@ -44,18 +45,18 @@ if nargin<1;
     cfg.b = 1;
     cfg.n = 101;
     % send warning and defaults
-    disp(sprintf(['WARNING: --------------------------------------------------------\n'...
+    fprintf(['WARNING: --------------------------------------------------------\n'...
                   'You are computing gamma distributed random numbers using defaults\n' ...
-            'That means a = 1, b = 1, and  n = 101 (numbers created)\n' ...
+            'That means a = 1, b = 1, and n = 101 (numbers created)\n' ...
             'No scaling is done.\n' ...
             'If you don''t know what that means, don''t use this function! \n' ...
-            '-----------------------------------------------------------------']))
+            '-----------------------------------------------------------------\n'])
 end
 if ~isfield(cfg, 'a'), cfg.a = 1; end % exponential distribution 
 if ~isfield(cfg, 'b'), cfg.b = 1; end % scaling to one -->mean at cfg.a
 if ~isfield(cfg, 'n'), cfg.n = 101; end % 101 random numbers
 
-% define parameters
+% set parameters
 a = cfg.a;
 b = cfg.b;
 n = cfg.n;
@@ -67,27 +68,36 @@ if isfield(cfg, 'mean')
     % alternatively the distribution could be reduced to 90% of its
     % variance
     % NOT recommended for small sample sizes (cfg.n)
-    if isfield(cfg.mean, 'n'), nMean = cfg.mean.n; else nMean = 3; end
-    if ~isfield(cfg.mean, 'method'), cfg.mean.method = 'mean'; end
+    if isfield(cfg.mean, 'n'), 
+      nMean = cfg.mean.n; 
+    else
+      nMean = 3; 
+    end
+    if ~isfield(cfg.mean, 'method')
+      cfg.mean.method = 'mean'; 
+    end
+    
+    gammaRaw = NaN(nMean,n);
     for j = 1:nMean
-        [gammaRaw(j,:) indx] = sort(gamrnd(a, b, n,1)');
+      [gammaRaw(j,:), indx] = sort(gamrnd(a, b, n, 1));
     end
-    if strcmp(cfg.mean.method, 'mean') 
-    gammaVec = mean(gammaRaw);
+    if strcmp(cfg.mean.method, 'mean')
+      gammaVec = mean(gammaRaw);
     elseif strcmp(cfg.mean.method, 'median')
-        gammaVec = median(gammaRaw);
+      gammaVec = median(gammaRaw);
     end
-    % redo sorting
+    % undo sorting
     gammaVec = gammaVec(indx);
 else
     gammaRaw = [];
     gammaVec = gamrnd(a, b, n,1)';
 end
 
+% scaling
 if isfield(cfg, 'scale')
     % use this option if you want your values to have a specific maximum
     % (i.e. be in a specific range), you could also scale by adjusting the
-    % 'scale' parameter b, but i find this a bit more convenient
+    % 'scale' parameter b, but I find this a bit more convenient
     if ~isfield(cfg.scale, 'val'), 
         scVal = max(gammaVec); %scale to maximum (i.e. new maximum 1)
     else
@@ -98,10 +108,7 @@ else
     gammaVecScaled = [];
 end
 
-if isfield(cfg, 'stats') % if you want descriptive stats
-    stats.max  = (a-1)*b; % maximum
-    stats.mean = a*b; % mean
-    stats.var = a*b^2; % variance
-else
-    stats = [];
-end
+%% stats
+stats.max  = (a-1)*b; % maximum
+stats.mean = a*b; % mean
+stats.var = a*b^2; % variance

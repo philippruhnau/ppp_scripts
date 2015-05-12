@@ -1,21 +1,21 @@
 function [twdata, sedata, singsubs] = plot_bargraph(cfg)
 
-% plot_bargraph(ALLEEG,cfg) plots bar graph with standard error of the mean
+% PLOT_BARGRAPH(cfg) plots bar graph with standard error of the mean
 % of specified time window(s) using either eeglab or preset input data
-%
-% needs eeg_channels.m from pr_matlab
 %
 % mandatory Input:
 %
 % cfg.comp - grouping vector e.g.: [1 1 1 2 2 2] indicates
-%            that the first three and the last three files [resp values]
+%            that the first three and the last three values
 %            belong together and are plotted as a group
 % 
-% cfg.data.mean/se - to be plotted value + standard error 
+% cfg.data.mean - vector of to be plotted mean values
+% cfg.data.se   - to be plotted standard error (same size as mean), set to
+%                 NaN if no plotting desired
 %
 % optional Input [default]:
 %
-% cfg.legend     - legend for bars default 'none'
+% cfg.legend     - legend for bars ['none']
 % cfg.fontsize   - font size [16]
 % cfg.width      - bar width, [.9]
 % cfg.linewidth  - edge line width [1]
@@ -74,7 +74,7 @@ twdata = cfg.data.mean;
 sedata = cfg.data.se;
 
 % sort after cfg.comp
-[groups, t, grp_indx] = unique(cfg.comp);
+[groups, ~, grp_indx] = unique(cfg.comp);
 
 for iGroup = 1:numel(groups)
   tw_resort(iGroup,:) = twdata(grp_indx==iGroup)';
@@ -94,7 +94,7 @@ end
 %% figure definitions
 
 if cfg.newfig
-figure;
+  figure;
 end
 hold on;
 
@@ -135,7 +135,7 @@ else
     b = bar(twdata, cfg.width, 'LineWidth' , cfg.linewidth,'ShowBaseLine', 'off');
 end
 
-% Labels and legend
+% labels and legend
 xlabel(cfg.xlabel);
 ylabel(cfg.ylabel);
 if ~strcmp(cfg.legend, 'none')
@@ -145,7 +145,6 @@ end
 %% plot errorbars 
 % if any se value is NaN, no errorbar plotting (even though this is not flexible BAUSTELLE)
 if ~any(isnan(sedata(:))) 
-    
   for iB = 1:numel(b)
 
     % positions of bars
@@ -159,7 +158,7 @@ if ~any(isnan(sedata(:)))
         'Color', 'k')
     end
     % now horizontal
-    wl = cfg.eblength/2;
+    wl = cfg.eblength/2; % legth of whisker
     for i = 1:size(seRange,1)
       %upper
       plot([xpos(i)-wl xpos(i)+wl], [seRange(i,1) seRange(i,1)],...
