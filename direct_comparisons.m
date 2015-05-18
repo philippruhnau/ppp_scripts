@@ -154,15 +154,15 @@ end
 % output matrix
 pw_matrix = NaN(size(levels,1));
 % find relevant contrast
-main_fac = false(size(level_contrasts));
+main_fac = false(size(level_contrasts,1),1);
 % find valid contrast within each main effect
 % only if at least one of the main effects is stable (i.e., equal) the 
 % contrast is valid
 if size(levels,2) > 1
   for i = 1:size(level_contrasts,1)
-    main_fac(i,:) = levels(level_contrasts(i,1),:) == levels(level_contrasts(i,2),:);
+    main_fac(i) = any(levels(level_contrasts(i,1),:) == levels(level_contrasts(i,2),:));
   end
-  main_fac = find(sum(main_fac,2))';
+   main_fac = find(main_fac)';
 else
   % if only one factor show all contrasts
   main_fac = 1:size(level_contrasts,1);

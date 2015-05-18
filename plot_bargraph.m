@@ -59,6 +59,10 @@ if nargin < 1, help plot_bargraph; return; end
 if nargin >1 
   error('!eeglab struct no longer supported, only taking cfg structure. check the help!');
 end
+if numel(cfg.comp) ~= numel(cfg.data.mean) 
+  error('Grouping vector and data have a different number of elements')
+end
+
 if ~isfield(cfg,'fontsize'), cfg.fontsize = 16; end
 if ~isfield(cfg, 'ylabel') , cfg.ylabel = ''; end
 if ~isfield(cfg, 'xlabel'), cfg.xlabel = ''; end
