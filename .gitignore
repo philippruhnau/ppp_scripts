@@ -1,7 +1,6 @@
 # hash to comment
 # use this file to define what’s to be ignored by git
 
-*.[oa]
 # ignore autosaves
 *~
 # ignore old autosaves
