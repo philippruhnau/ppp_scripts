@@ -12,6 +12,5 @@ add/
 # ignore the shell which is supposed to update (and others)
 run_update.sh
 copy_to_ppp.sh
-initialize_remote
 .DS_Store
-.gitignore
+
