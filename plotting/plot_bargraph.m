@@ -147,10 +147,10 @@ if ~strcmp(cfg.legend, 'none')
 end
 
 %% plot errorbars 
-% if any se value is NaN, no errorbar plotting (even though this is not flexible BAUSTELLE)
-if ~any(isnan(sedata(:))) 
-  for iB = 1:numel(b)
 
+for iB = 1:numel(b)
+  % if se value is NaN, no errorbar plotting
+  if ~isnan(sedata(iB))
     % positions of bars
     if verLessThan('matlab', '8.4')
       xpos = mean(get(get(b(iB), 'Children'), 'XData'));
