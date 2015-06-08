@@ -152,7 +152,11 @@ if ~any(isnan(sedata(:)))
   for iB = 1:numel(b)
 
     % positions of bars
-    xpos = b(iB).XData + b(iB).XOffset;
+    if verLessThan('matlab', '8.4')
+      xpos = mean(get(get(b(iB), 'Children'), 'XData'));
+    else % newer versions have different handling
+      xpos = b(iB).XData + b(iB).XOffset;
+    end
     % error range
     seRange = [(twdata(:,iB)-sedata(:,iB)) (twdata(:,iB)+sedata(:,iB))];
     % first plot vertical lines
