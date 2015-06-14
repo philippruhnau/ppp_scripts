@@ -1,4 +1,4 @@
-function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,pool)
+function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,pool, barplot)
 
 % function [comparison levels ps pw_matrix] = direct_comparisons(X,p,factypes,pool)
 %
@@ -17,13 +17,14 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 %
 % p         - threshholds for .05, .01, & .001 alpha levels of preferred
 %             correction method (will be calculated when []), might contain
-%             also four values, then thresholds at 0.1, 0.05, 0.01, and 
-%             0.001 are assumed 
-% factypes  - cell array, factor types 'rm' for repeated measures, 'btw' 
+%             also four values, then thresholds at 0.1, 0.05, 0.01, and
+%             0.001 are assumed
+% factypes  - cell array, factor types 'rm' for repeated measures, 'btw'
 %             for between subjects factor; default: {'rm'} for all factors
-% pool      - index of pooled factor(s) (CAVE: mixed pooled between and 
-%             within subject factor pooling has not really been tested, 
+% pool      - index of pooled factor(s) (CAVE: mixed pooled between and
+%             within subject factor pooling has not really been tested,
 %             check your results)
+% barplot   - if you want a bargraph of the (pooled) mean values set 1 [0]
 %
 % output:
 %
@@ -37,7 +38,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 % pw_matrix   - pairwise comparison matrix, shows significance level or 1,
 %               if not significant
 %
-                                                              
+
 % P.Ruhnau, Email: mail(at)philipp-ruhnau.de, 2012-12-04
 %
 % This program is free software; you can redistribute it and/or modify
@@ -53,7 +54,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 % You should have received a copy of the GNU General Public License
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-                                                              
+
 % 2012-12-04 - between subject factor pooling fixed (appending to one
 % group)
 % 2012-12-04 - removed subject indx column
@@ -61,6 +62,7 @@ function [comparison, levels, ps, pw_matrix] = direct_comparisons(X,p,factypes,p
 
 
 if nargin < 2,  p = []; end
+if nargin < 5, barplot = 0; end
 if ~exist('factypes', 'var') || isempty(factypes), factypes = repmat({'rm'}, 1, size(X,2)-2); end
 
 % extract data
@@ -70,20 +72,20 @@ fac = X(:,2:end);
 
 % compute group indizes and all group comparisons
 if ~exist('pool', 'var')
-    levels = unique(fac, 'rows');
-    level_contrasts = nchoosek(1:size(levels,1),2);
-    left_factypes = factypes;
+  levels = unique(fac, 'rows');
+  level_contrasts = nchoosek(1:size(levels,1),2);
+  left_factypes = factypes;
 else
-    % get index of pooled factor(s) and remove from contrasts
-    idx_fac = ~ismember(1:size(fac,2),pool);
-    idx_p = ismember(1:size(fac,2),pool);
-    fac_p = fac(:,idx_fac);
-    % find pooled rm factors
-    fac_p_rm = fac(:, logical(idx_p.*strcmp(factypes, 'rm')));
-    levels = unique(fac_p, 'rows');
-    level_contrasts = nchoosek(1:size(levels,1),2);
-    left_factypes = factypes(idx_fac);
-    fprintf('Data pooled over factor %2d\n', pool)
+  % get index of pooled factor(s) and remove from contrasts
+  idx_fac = ~ismember(1:size(fac,2),pool);
+  idx_p = ismember(1:size(fac,2),pool);
+  fac_p = fac(:,idx_fac);
+  % find pooled rm factors
+  fac_p_rm = fac(:, logical(idx_p.*strcmp(factypes, 'rm')));
+  levels = unique(fac_p, 'rows');
+  level_contrasts = nchoosek(1:size(levels,1),2);
+  left_factypes = factypes(idx_fac);
+  fprintf('Data pooled over factor %2d\n', pool)
 end
 
 
@@ -93,61 +95,64 @@ btw_fac = strcmp(left_factypes, 'btw');
 ps = [];
 
 for i = 1:size(level_contrasts,1)
-    % get relevant data
-    cur_contrast = [levels(level_contrasts(i,1),:);...
-        levels(level_contrasts(i,2),:)];
-    if ~exist('pool', 'var') % no pooling
-        set1 = data(ismember(fac,cur_contrast(1,:), 'rows'));
-        set2 = data(ismember(fac,cur_contrast(2,:), 'rows'));
-    elseif exist('pool', 'var') && sum(strcmp(factypes(pool), 'btw'))
-        % if pool factor is between, append groups, 
-        set1 = data(ismember(fac_p,cur_contrast(1,:), 'rows'));
-        set2 = data(ismember(fac_p,cur_contrast(2,:), 'rows'));
-        if sum(strcmp(factypes(pool), 'rm')) % if additionally pooling is required for an rm factor      
-            % reshape each set, and compute mean for same subjects
-            pool_steps = prod(max(fac_p_rm));
-            set1 = reshape(set1,numel(set1)/pool_steps, pool_steps);
-            set1 = mean(set1,2); 
-            set2 = reshape(set2,numel(set2)/pool_steps, pool_steps);
-            set2 = mean(set2,2);
-        end
-    else  % for repeated measures, pool for same subjects over different factor steps
-        pool_steps = prod(max(fac(:,pool)));
-        set1 = data(ismember(fac_p,cur_contrast(1,:), 'rows'));
-        set1 = reshape(set1,numel(set1)/pool_steps, pool_steps);
-        set1 = mean(set1,2);
-        set2 = data(ismember(fac_p,cur_contrast(2,:), 'rows'));
-        set2 = reshape(set2,numel(set2)/pool_steps, pool_steps);
-        set2 = mean(set2,2);
+  % get relevant data
+  cur_contrast = [levels(level_contrasts(i,1),:);...
+    levels(level_contrasts(i,2),:)];
+  if ~exist('pool', 'var') % no pooling
+    set1 = data(ismember(fac,cur_contrast(1,:), 'rows'));
+    set2 = data(ismember(fac,cur_contrast(2,:), 'rows'));
+  elseif exist('pool', 'var') && sum(strcmp(factypes(pool), 'btw'))
+    % if pool factor is between, append groups,
+    set1 = data(ismember(fac_p,cur_contrast(1,:), 'rows'));
+    set2 = data(ismember(fac_p,cur_contrast(2,:), 'rows'));
+    if sum(strcmp(factypes(pool), 'rm')) % if additionally pooling is required for an rm factor
+      % reshape each set, and compute mean for same subjects
+      pool_steps = prod(max(fac_p_rm));
+      set1 = reshape(set1,numel(set1)/pool_steps, pool_steps);
+      set1 = mean(set1,2);
+      set2 = reshape(set2,numel(set2)/pool_steps, pool_steps);
+      set2 = mean(set2,2);
     end
-    
-    if sum(btw_fac) ~=0 % if between subject factor present
-        if sum(diff(cur_contrast(:,btw_fac))) ~= 0 % if curent contrast between
-            temp = ANOVA1([set1;set2], [ones(size(set1));ones(size(set2))+1]);
-        else % if rm
-            temp = rmANOVA1([set1,set2]);
-        end
-    else % if only rm factors
-        temp = rmANOVA1([set1,set2]);
+  else  % for repeated measures, pool for same subjects over different factor steps
+    pool_steps = prod(max(fac(:,pool)));
+    set1 = data(ismember(fac_p,cur_contrast(1,:), 'rows'));
+    set1 = reshape(set1,numel(set1)/pool_steps, pool_steps);
+    set1 = mean(set1,2);
+    set2 = data(ismember(fac_p,cur_contrast(2,:), 'rows'));
+    set2 = reshape(set2,numel(set2)/pool_steps, pool_steps);
+    set2 = mean(set2,2);
+  end
+  
+  if sum(btw_fac) ~=0 % if between subject factor present
+    if sum(diff(cur_contrast(:,btw_fac))) ~= 0 % if curent contrast between
+      temp = ANOVA1([set1;set2], [ones(size(set1));ones(size(set2))+1]);
+    else % if rm
+      temp = rmANOVA1([set1,set2]);
     end
-    comparison{i} = temp;
-    ps = [ps temp.p];
-    
+  else % if only rm factors
+    temp = rmANOVA1([set1,set2]);
+  end
+  
+  % save output and mean data for plot
+  bar_data(level_contrasts(i,:)) = [mean(set1) mean(set2)];
+  comparison{i} = temp;
+  ps = [ps temp.p];
+  
 end
 
 if isempty(p) % get fdr correction, if no input
-    ps = round(ps * 1e10) / 1e10;
-    p_fdr(1) = fdr(ps,0.05);
-    p_fdr(2) = fdr(ps,0.01);
-    p_fdr(3) = fdr(ps,0.001);
+  ps = round(ps * 1e10) / 1e10;
+  p_fdr(1) = fdr(ps,0.05);
+  p_fdr(2) = fdr(ps,0.01);
+  p_fdr(3) = fdr(ps,0.001);
 else
-    p_fdr = p;
+  p_fdr = p;
 end
 
 if numel(p_fdr) == 4 % if you want marginally significant results as well
-    p_level = [0.1 0.05 0.01 0.001];
+  p_level = [0.1 0.05 0.01 0.001];
 else
-p_level = [0.05, 0.01 0.001];
+  p_level = [0.05, 0.01 0.001];
 end
 
 %% to be printed contrast (select the sensible ones only) but base fdr on all contrast!
@@ -156,13 +161,13 @@ pw_matrix = NaN(size(levels,1));
 % find relevant contrast
 main_fac = false(size(level_contrasts,1),1);
 % find valid contrast within each main effect
-% only if at least one of the main effects is stable (i.e., equal) the 
+% only if at least one of the main effects is stable (i.e., equal) the
 % contrast is valid
 if size(levels,2) > 1
   for i = 1:size(level_contrasts,1)
     main_fac(i) = any(levels(level_contrasts(i,1),:) == levels(level_contrasts(i,2),:));
   end
-   main_fac = find(main_fac)';
+  main_fac = find(main_fac)';
 else
   % if only one factor show all contrasts
   main_fac = 1:size(level_contrasts,1);
@@ -170,21 +175,25 @@ end
 
 disp('Printing valid contrasts only, at least one main effect stable')
 for icomp = main_fac %1:size(comparison,2) % print reslts of relevant only
-    eta2 = comparison{icomp}.SS.effect ./ comparison{icomp}.SS.total;
-    [numSign signif sSign] = find_p_FDR(comparison{icomp}, p_fdr,p_level);
-    fprintf('Contrast: %.0f vs. %.0f - F(%.0f,%.0f) = %.2f, p %s %.3f, p_uc = %.4f, eta=%.3f \n',...
-        level_contrasts(icomp,1), level_contrasts(icomp,2), comparison{icomp}.df(1), comparison{icomp}.df(2), comparison{icomp}.F, sSign, signif, comparison{icomp}.p, eta2);
-    if strcmp(sSign, '>') % pairwise matrix, fill lower triangle
-        pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = 1.000;
-    else
-        pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = signif;
-    end
+  eta2 = comparison{icomp}.SS.effect ./ comparison{icomp}.SS.total;
+  [numSign signif sSign] = find_p_FDR(comparison{icomp}, p_fdr,p_level);
+  fprintf('Contrast: %.0f vs. %.0f - F(%.0f,%.0f) = %.2f, p %s %.3f, p_uc = %.4f, eta=%.3f \n',...
+    level_contrasts(icomp,1), level_contrasts(icomp,2), comparison{icomp}.df(1), comparison{icomp}.df(2), comparison{icomp}.F, sSign, signif, comparison{icomp}.p, eta2);
+  if strcmp(sSign, '>') % pairwise matrix, fill lower triangle
+    pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = 1.000;
+  else
+    pw_matrix(level_contrasts(icomp,2), level_contrasts(icomp,1)) = signif;
+  end
 end
 
-
-
-
-% fdr() - compute false detection rate mask
+%% plot bars
+if barplot
+  figure;
+  bar(bar_data)
+end
+%% helper functions
+%%
+%% fdr() - compute false detection rate mask
 %
 % Usage:
 %   >> [p_fdr, p_masked] = fdr( pvals, alpha);
@@ -244,39 +253,37 @@ cVID = 1;
 cVN = sum(1./(1:V));
 
 if nargin < 2
-    pID = ones(size(pvals));
-    thresholds = exp(linspace(log(0.1),log(0.000001), 100));
-    for index = 1:length(thresholds)
-        [tmp p_masked] = fdr(pvals, thresholds(index));
-        pID(p_masked) = thresholds(index);
-    end;
+  pID = ones(size(pvals));
+  thresholds = exp(linspace(log(0.1),log(0.000001), 100));
+  for index = 1:length(thresholds)
+    [tmp p_masked] = fdr(pvals, thresholds(index));
+    pID(p_masked) = thresholds(index);
+  end;
 else
-    pID = p(max(find(p<=I/V*q/cVID))); % standard FDR
-    %pN = p(max(find(p<=I/V*q/cVN)));  % non-parametric FDR (not used)
+  pID = p(max(find(p<=I/V*q/cVID))); % standard FDR
+  %pN = p(max(find(p<=I/V*q/cVN)));  % non-parametric FDR (not used)
 end;
 if isempty(pID), pID = 0; end;
 
 if nargout > 1
-    p_masked = pvals<=I/V*q/cVID;
+  p_masked = pvals<=I/V*q/cVID;
 end;
 
-
-% find significant effects
+%% find significant effects
 function [numSign signif sSign] = find_p_FDR(results, p, pp)
-
 
 numSign = max(find(round(p*1e10) == round(results.p*1e10)));
 if numSign ~= 0
-	signif = pp(numSign);
-	sSign  = '=';
+  signif = pp(numSign);
+  sSign  = '=';
 else
-	numSign = length(find(round(p*1e10) > round(results.p*1e10)));
-	if numSign == 0
-		signif = 0.05;
-		sSign  = '>';
-	else
-		signif = pp(numSign);
-		sSign  = '<';
-	end
+  numSign = length(find(round(p*1e10) > round(results.p*1e10)));
+  if numSign == 0
+    signif = 0.05;
+    sSign  = '>';
+  else
+    signif = pp(numSign);
+    sSign  = '<';
+  end
 end
 
