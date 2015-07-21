@@ -20,8 +20,8 @@ function plot_TA(data, cfg)
 %                  dashed lines to where the error areas overlap (not
 %                  visible with transparancy but essential when saving as
 %                  vector graphic, eps)
-% cfg.color      - cell array of colors per line, or colormap (m by 3
-%                  matrix) [[0 0 0] = black for all]
+% cfg.color      - cell array of colors per line (like {'k' 'c' 'y'}, 
+%                  or colormap (m by 3 matrix) [[0 0 0] = black for all]
 % cfg.linewidth  - linewidth [1 times channels]
 % cfg.linestyle  - linestyle [{'-'} times channel]
 % cfg.reverse    - if 1 reverses y-axis [0]
@@ -73,6 +73,8 @@ elseif iscell(cfg.color) % if colormap as input
     % this is pretty cool
     colors(i,:) = bitget(find('krgybmcw'==cfg.color{i})-1,1:3);
   end
+else
+  colors = cfg.color;
 end
 
 
