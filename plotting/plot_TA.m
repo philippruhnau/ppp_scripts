@@ -148,11 +148,11 @@ if isfield(cfg, 'vline')
     if isfield(cfg.vline_style, 'color'); vl_col = cfg.vline_style.color; end
     if isfield(cfg.vline_style, 'width'); vl_width = cfg.vline_style.width; end
   end
-  if ~exist('vl_col', 'var'), vl_col = repmat({'k'},1,numel(vl)); end
+  if ~exist('vl_col', 'var'), vl_col = repmat([0 0 0],numel(vl),1); end
   if ~exist('vl_width', 'var'), vl_width = repmat(2,1,numel(vl)); end
   
   for i = 1:numel(vl) % plot lines
-    plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col{i}, 'lineWidth', vl_width(i))
+    plot(repmat(vl(i),1,2),[cfg.ylim], 'color', vl_col(i,:), 'lineWidth', vl_width(i))
   end
 end
 %% default adjustments

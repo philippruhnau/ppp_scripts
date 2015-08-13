@@ -1,4 +1,4 @@
-function [stats] = plot_regress2D(x,y,cfg)
+function [stats, h] = plot_regress2D(x,y,cfg)
 
 % [stats] = plot_regress2D(x,y,cfg)
 % plots 2D scatterplot and regressionline and R^2
@@ -62,7 +62,7 @@ elseif strcmp(cfg.rpos, 'upleft')
 end
 
 % figure defaults
-figure;
+h = figure;
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...

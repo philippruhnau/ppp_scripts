@@ -56,7 +56,7 @@ for iCond = 1:length(cfg.type)
             'caption' , [cfg.type{iCond}]);
         
         % eliminate colorbar
-        if cfg.colorbar == 0,  set(gca, 'visible', 'off'); end
+        if cfg.colorbar == 0,  colorbar('off'); end
         
         % saving
         if isfield(cfg, 'outfile')
