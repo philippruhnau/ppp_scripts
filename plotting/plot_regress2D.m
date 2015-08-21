@@ -86,14 +86,14 @@ if size(y,2) == 1 % if x and y are vectors
     % regression line
     xfit = linspace(lims(1),lims(2),20);
     YFIT = b(1) + b(2)*xfit;
-    plot(xfit, YFIT, 'k')
+    plot(xfit, YFIT, cfg.linestyle{1})
     axis(lims)
     if stats.tstat.pval(2)<=0.01, sig = '**'; elseif stats.tstat.pval(2)<=0.05, sig = '*'; elseif stats.tstat.pval(2)<=0.1, sig = '+'; else sig = '{n.s.}';end
     % for some reason eval can or does produce single values which text
     % does not want to interprete...thus doubled here (and below)
     x_val = double(eval(['lims(rpos(1))' rsign{1} 'abs((lims(2)-lims(1))/' rquot ')']));
     y_val = double(eval(['lims(rpos(2))' rsign{2} 'abs((lims(3)-lims(4))/9)']));
-    text(x_val, y_val, ['R^2 = ' num2str(round(1000*r)/1000, '%0.3f') '^{' sig '}'], 'fontsize', 12)
+    text(x_val, y_val, ['R^2 = ' num2str(round(1000*r)/1000, '%0.3f') '^{' sig '}'], 'fontsize', 12, 'color', cfg.fontcolor{1})
 
 else
     for i = 1:size(y,2)
