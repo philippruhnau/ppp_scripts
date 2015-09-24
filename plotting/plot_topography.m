@@ -40,46 +40,77 @@ mycolor = define_map(cfg.cmaptype,cfg.steps);
 
 for iCond = 1:length(cfg.type)
     EEG = ALLEEG(iCond);
+    
+    % change to fieldtrip format
+    data_ga = eeglab2fieldtrip(EEG, 'timelockanalysis');
+    data_ga.dimord = 'chan_time';
     %topography parameters,  calls different windows
-    for iTime = 1 :size(cfg.twin,2)
+    for iTime = 1 :size(cfg.twin,1)
         
-        % call pop_plotsserpmap from sphspline 0.11
-        pop_plotsserpmap(EEG,...
-            'type', cfg.plot_mode,...
-            'proj', 'equiareal',...
-            'items', cfg.twin(:, iTime),...
-            'lambda', cfg.lambda,... %1e-7
-            'cmapsteps', cfg.steps,...
-            'colormap',  mycolor,...
-            'isolines',  cfg.isolines,...
-            'maplimits', [cfg.ylim(1) cfg.ylim(2)],...
-            'caption' , [cfg.type{iCond}]);
-        
-        % eliminate colorbar
-        if cfg.colorbar == 0,  colorbar('off'); end
+      
+      
+      
+        % select layout
+    pcfg = [];
+    pcfg.layout = 'EEG32.lay';%'EEG1010.lay';% 
+    pcfg.parameter = 'avg';
+    pcfg.fontsize = 16;
+    pcfg.comment = 'no'; % better save time win in the file name then in the plot, it's nasty to get out later 
+    pcfg.xlim = cfg.twin(iTime,:);
+    figure; ft_topoplotER(pcfg, data_ga) 
+    
+    
+    
         
         % saving
         if isfield(cfg, 'outfile')
-            outfile = [cfg.outfile(1:end-4) '_' cfg.type{iCond} '_' num2str(cfg.twin(1,iTime)) '-' num2str(cfg.twin(2,iTime)) '_' cfg.plot_mode cfg.outfile(end-3:end)];
-            save_figure(outfile, cfg.res);
+            outfile = [cfg.outfile(1:end-4) '_' cfg.type{iCond} '_' num2str(cfg.twin(iTime,1)) '-' num2str(cfg.twin(iTime,2)) '_' cfg.plot_mode cfg.outfile(end-3:end)];
+            save_figure(outfile, cfg.res, 1);
         end
     end
 end
 
 
-function save_figure(name, resolution)
 
-% saves figures in postscipt or portable network graphic format
-%
-% Input:
-%
-% name       - name and place of to be saved file
-% resolution - picture resolution
-
-disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
-
-if ~isempty(strfind(name, 'png'))
-    eval(['print -dpng -r' num2str(resolution) ' ' name]);
-elseif ~isempty(strfind(name, 'eps'))
-      eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
-end
+% old version with eeglab plugin, but ugly contour overlap
+%         % call pop_plotsserpmap from sphspline 0.11
+%         pop_plotsserpmap(EEG,...
+%             'type', cfg.plot_mode,...
+%             'proj', 'equiareal',...
+%             'items', cfg.twin(:, iTime),...
+%             'lambda', cfg.lambda,... %1e-7     'cmapsteps', cfg.steps,...
+%             'colormap',  mycolor,...
+%             'levelList',  cfg.isolines,...
+%             'maplimits', [cfg.ylim(1) cfg.ylim(2)],...
+%             'caption' , [cfg.type{iCond}]);
+%         
+%         h = get(gca);
+%         % adjust the color steps in the contour
+%         h.Children(1).LevelList = linspace(min(h.Children(1).LevelList), max(h.Children(1).LevelList), size(mycolor,1));
+%         % adjust the level of elements
+%         h.SortMethod = 'childorder';
+%         
+%         % remove title if not given
+%         if ~isfield(cfg, 'title'),  h.Title.Visible = 'off'; end
+%         
+%         
+%         % eliminate colorbar
+%         if cfg.colorbar == 0,  colorbar('off'); end
+%         
+%         
+% function save_figure(name, resolution)
+% 
+% % saves figures in postscipt or portable network graphic format
+% %
+% % Input:
+% %
+% % name       - name and place of to be saved file
+% % resolution - picture resolution
+% 
+% disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
+% 
+% if ~isempty(strfind(name, 'png'))
+%     eval(['print -dpng -r' num2str(resolution) ' ' name]);
+% elseif ~isempty(strfind(name, 'eps'))
+%       eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
+% end
