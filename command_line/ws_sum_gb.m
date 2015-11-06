@@ -1,4 +1,4 @@
-function ws_sum_gb
+function [si_who] = ws_sum_gb
 
 % function [si_who] = ws_sum_gb
 % calculates current working memory size in GB
