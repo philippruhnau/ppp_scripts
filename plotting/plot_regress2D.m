@@ -46,6 +46,7 @@ function [stats, h] = plot_regress2D(x,y,cfg)
 if size(y,2) ~= size(x,2), error('Number of colums in x and y must be the same'); end
 if nargin < 3, cfg = struct; end 
 if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
+if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
 if ~isfield(cfg, 'markerstyle'),  cfg.markerstyle(1:size(x,2)) = {'k*'}; end
 if ~isfield(cfg, 'linestyle'),  cfg.linestyle(1:size(x,2)) = {'k'}; end
 if ~isfield(cfg, 'fontcolor'),  cfg.fontcolor(1:size(x,2)) = {'k'}; end
@@ -62,7 +63,11 @@ elseif strcmp(cfg.rpos, 'upleft')
 end
 
 % figure defaults
-h = figure;
+if cfg.newfig
+  h = figure;
+else
+  h = gcf;
+end
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
