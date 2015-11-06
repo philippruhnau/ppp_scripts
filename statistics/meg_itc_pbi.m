@@ -1,4 +1,4 @@
-function [phi, itcA, itcB, itc_all] = cimecex_itc_pbi(dataA, dataB, itc_all)
+function [phi, itcA, itcB, itc_all] = meg_itc_pbi(dataA, dataB, itc_all)
 
 % function [phi, itcA, itcB, itc_all] = cimecex_itc_pbi(dataA, dataB, itc_all)
 %
@@ -28,7 +28,7 @@ function [phi, itcA, itcB, itc_all] = cimecex_itc_pbi(dataA, dataB, itc_all)
 % Ref:
 % Busch, N. A., Dubois, J., & VanRullen, R. (2009). The phase of ongoing
 %   EEG oscillations predicts visual perception. J Neurosci, 29(24),
-%   7869–7876.
+%   7869???7876.
 
 %--------------------------------------------------------------------
 % copyright (c), 2013, P. Ruhnau, mail@philipp-ruhnau.de, 2013-04-05
@@ -73,9 +73,12 @@ if isfield(dataA, 'fourierspctrm')
     dat = dat./abs(dat);
     % ITC is the length of the average complex numbers
     itc_all = abs(mean(dat, 1));
-elseif isnumeric(peter)
+elseif isnumeric(dataA)
     % do nothing, only report
     disp('Input is inter-trial coherence')
+    
+    itcA = dataA;
+    itcB = dataB;
 else
     error('Wrong data input, See documentation')
 end
