@@ -326,7 +326,7 @@ results.p.subjects = P4;
 results.df.A = [dfA dfEA];
 results.df.B = [dfB dfEB];
 results.df.AB = [dfAB dfEAB];
-results.df.subjecs = [dfS dfSE];
+results.df.subjects = [dfS dfSE];
 
 
 return;

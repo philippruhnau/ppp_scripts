@@ -22,6 +22,7 @@ function [stats, h] = plot_regress2D(x,y,cfg)
 %              column ['all']
 % cfg.rpos - string; defines the position of R^2 ('upleft' or 'downright')
 %            ['downright']
+% cfg.newfig - if 1 plots new figure
 %
 
 %1234123412341234123412341234123412341234123412341234123412341234123

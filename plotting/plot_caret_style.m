@@ -39,6 +39,7 @@ end
 if save_figure == 1
   disp(' --- ')
   disp('Saving output files')
+  disp(name)
   disp(' --- ')
 end
 %% make image bigger bigger (twice seems to be a nice size in the end)
