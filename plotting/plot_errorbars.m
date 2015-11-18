@@ -16,6 +16,7 @@ function h = plot_errorbars(data, cfg)
 % cfg.linewidth   - number [2]
 % cfg.color       - color indicator or RGB triplet ['k']
 % cfg.linestyle   - linestyle specifier ['-']
+% cfg.line        - 1 to connect condition bars [1]
 % cfg.marker      - marker specifier ['o']
 % cfg.m_size      - marker size [8]
 % cfg.m_edgecolor - marker edge color ['k']
@@ -43,6 +44,7 @@ function h = plot_errorbars(data, cfg)
 %
 
 % defaults
+if nargin < 2, cfg = struct; end
 if ~isfield(cfg, 'linewidth'), cfg.linewidth = 2; end
 if ~isfield(cfg, 'color'), cfg.color = 'k'; end
 if ~isfield(cfg, 'linestyle'), cfg.linestyle = '-'; end
@@ -52,7 +54,9 @@ if ~isfield(cfg, 'm_facecolor'), cfg.m_facecolor = 'k'; end
 if ~isfield(cfg, 'm_size'), cfg.m_size = 8; end
 if ~isfield(cfg, 'whisk_length'), cfg.whisk_length = .1; end
 if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
+if ~isfield(cfg, 'line'), cfg.line = 1; end
 
+% get data
 if isstruct(data)
   meanData = data.mean;
   seData = data.se;
@@ -64,6 +68,9 @@ else
   help plot_errorbars
   error('Wrong data format')
 end
+
+% check whether default positions for bars
+if ~isfield(cfg, 'xposition'), cfg.xposition = 1:numel(meanData); end
 
 % make row vectors
 meanData = meanData(:)';
@@ -80,21 +87,23 @@ set(gcf,...
   'PaperPositionMode', 'auto');
 
 %% plot markers
-plot(1:numel(meanData), meanData, ...
+plot(cfg.xposition , meanData, ...
   cfg.marker, ...
   'MarkerSize', cfg.m_size,...
   'MarkerEdgeColor',cfg.m_edgecolor,...
   'MarkerFaceColor', cfg.m_facecolor)
 %% plot line connecting markers
-plot(1:numel(meanData), meanData, ...
-     'LineStyle', cfg.linestyle,...
-     'LineWidth', cfg.linewidth,...
-     'Color', cfg.color);
+if cfg.line
+  plot(cfg.xposition , meanData, ...
+    'LineStyle', cfg.linestyle,...
+    'LineWidth', cfg.linewidth,...
+    'Color', cfg.color);
+end
 %% plot error bar whiskers
 seRange = [(meanData-seData)' (meanData+seData)'];
 % first vertical lines
 for i = 1:size(seRange,1)
-  plot([i i], [seRange(i,:)],...
+  plot(cfg.xposition([i i]), [seRange(i,:)],...
     'LineStyle', cfg.linestyle,...
      'LineWidth', cfg.linewidth,...
      'Color', cfg.color)
@@ -104,12 +113,12 @@ end
 wl = cfg.whisk_length;
 for i = 1:size(seRange,1)
   %upper
-  plot([i-wl i+wl], [seRange(i,1) seRange(i,1)],...
+  plot([cfg.xposition(i)-wl cfg.xposition(i)+wl], [seRange(i,1) seRange(i,1)],...
     'LineStyle', '-',...
     'LineWidth', cfg.linewidth,...
     'Color', cfg.color)
   %lower
-  plot([i-wl i+wl], [seRange(i,2) seRange(i,2)],...
+  plot([cfg.xposition(i)-wl cfg.xposition(i)+wl], [seRange(i,2) seRange(i,2)],...
     'LineStyle', '-'  ,...
     'LineWidth', cfg.linewidth,...
     'Color', cfg.color)

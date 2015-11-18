@@ -94,7 +94,7 @@ if size(y,2) == 1 % if x and y are vectors
     YFIT = b(1) + b(2)*xfit;
     plot(xfit, YFIT, cfg.linestyle{1})
     axis(lims)
-    if stats.tstat.pval(2)<=0.01, sig = '**'; elseif stats.tstat.pval(2)<=0.05, sig = '*'; elseif stats.tstat.pval(2)<=0.1, sig = '+'; else sig = '{n.s.}';end
+    if stats.tstat.pval(2)<=0.01, sig = '**'; elseif stats.tstat.pval(2)<=0.05, sig = '*'; elseif stats.tstat.pval(2)<=0.095, sig = '+'; else sig = '{n.s.}';end
     % for some reason eval can or does produce single values which text
     % does not want to interprete...thus doubled here (and below)
     x_val = double(eval(['lims(rpos(1))' rsign{1} 'abs((lims(2)-lims(1))/' rquot ')']));
@@ -113,7 +113,7 @@ else
             YFIT = b(1) + b(2)*xfit;
             plot(xfit, YFIT, cfg.linestyle{i})
             axis(lims)
-            if stats(i).tstat.pval(2)<=0.01, sig = '**'; elseif stats(i).tstat.pval(2)<=0.05, sig = '*'; elseif stats(i).tstat.pval(2)<=0.1, sig = '+'; else sig = '{n.s.}';end
+            if stats(i).tstat.pval(2)<=0.01, sig = '**'; elseif stats(i).tstat.pval(2)<=0.05, sig = '*'; elseif stats(i).tstat.pval(2)<=0.095, sig = '+'; else sig = '{n.s.}';end
             x_val = double(eval(['lims(rpos(1))' rsign{1} 'abs((lims(2)-lims(1))/6)']));
             y_val = double(eval(['lims(rpos(2))' rsign{2} 'abs((lims(3)-lims(4))/6)' rsign{2} '(i-1)*abs((lims(3)-lims(4))/9)']));
             text(x_val, y_val , ['R^2 = ' num2str(round(1000*r)/1000, '%0.3f') '^{' sig '}'], 'fontsize', 12, 'color', cfg.fontcolor{i})
@@ -129,7 +129,7 @@ else
         YFIT = b(1) + b(2)*xfit;
         plot(xfit, YFIT, cfg.linestyle{1})
         axis(lims)
-        if stats.tstat.pval(2)<=0.01, sig = '**'; elseif stats.tstat.pval(2)<=0.05, sig = '*'; elseif stats.tstat.pval(2)<=0.1, sig = '+'; else sig = '{n.s.}';end
+        if stats.tstat.pval(2)<=0.01, sig = '**'; elseif stats.tstat.pval(2)<=0.05, sig = '*'; elseif stats.tstat.pval(2)<=0.095, sig = '+'; else sig = '{n.s.}';end
         x_val = double(eval(['lims(rpos(1))' rsign{1} 'abs((lims(2)-lims(1))/6)']));
         y_val = double(eval(['lims(rpos(2))' rsign{2} 'abs((lims(3)-lims(4))/9)']));
         text(x_val, y_val , ['R^2 = ' num2str(round(1000*r)/1000, '%0.3f') '^{' sig '}'], 'fontsize', 12)
