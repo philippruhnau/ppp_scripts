@@ -141,7 +141,7 @@ view(2)
 % set axis to equal (otherwise stretches x)
 axis equal
 % set axis limits
-axis(cfg.circlim * [-1.1, 1.1, -1.1, 1.1])
+axis(cfg.circlim * [-1.2, 1.2, -1.2, 1.2])
 
 %% plot data
 % transform data to Cartesian coordinates.

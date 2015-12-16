@@ -1,6 +1,6 @@
 function caml = plot_caret_style(name, resolution, material_mode, view_angle, save_figure)
 
-% function plot_caret_style(name, resolution, material_mode, view_angle)
+% function plot_caret_style(name, resolution, material_mode, view_angle, save_figure)
 % takes a figure (surface plot) and rotates it to some viewing angles
 % and move the camlight respectively
 %
