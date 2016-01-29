@@ -75,7 +75,11 @@ if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
 %% assign and reshape the data
 
 twdata = cfg.data.mean;
-sedata = cfg.data.se;
+if ~isfield(cfg.data, 'se') || isempty(cfg.data.se)
+  sedata = NaN(size(twdata));
+else
+  sedata = cfg.data.se;
+end
 
 % sort after cfg.comp
 [groups, ~, grp_indx] = unique(cfg.comp);

@@ -32,18 +32,17 @@ if nargin < 2, resolution = 600; end;
 if nargin < 3, loose = 1; end
     
 if ~isempty(strfind(name, 'png'))
-    eval(['print -dpng -r' num2str(resolution) ' ' name]);
+    print(name, '-dpng', ['-r' num2str(resolution)])
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'eps'))
     if loose == 1
-      eval(['print -depsc2 -painters -loose -r' num2str(resolution) ' ' name]);
+      print(name, '-depsc2', ['-r' num2str(resolution)], '-loose')
     else
-      eval(['print -depsc2 -painters -r' num2str(resolution) ' ' name]);
+      print(name, '-depsc2', ['-r' num2str(resolution)])
     end
-%     eval(['print -depsc2 -opengl -loose -r' num2str(resolution) ' ' name]);
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'jpg'))
-    eval(['print -djpeg90 -r' num2str(resolution) ' ' name]);
+    print(name, '-djpeg90', ['-r' num2str(resolution)])
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 else
     disp('WARNING: No format given, nothing is saved!!!!')

@@ -8,7 +8,7 @@ function [results] = RMAOV2(X,alpha, names)
 %   read the help section of the RMAOV1 file which you can find on this Matlab File
 %   Exchange site.
 %   
-%   Syntax: function [RMAOV2] = RMAOV2(X,alpha) 
+%   Syntax: function [RMAOV2] = RMAOV2(X,alpha, names) 
 %      
 %     Inputs:
 %          X - data matrix (Size of matrix must be n-by-4;dependent variable=column 1;
