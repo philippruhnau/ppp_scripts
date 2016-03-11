@@ -13,6 +13,7 @@ function plot_scatter(data, cfg)
 % cfg.linewidth - vector - linewidth between markers [1 1 ...]
 % cfg.linestyle - cell array - linestyle [{'-' '-' ...}]
 % cfg.linecolor - cell array - linecolor [{'k' 'k' ...}]
+% cfg.newfig      - 1 for new figure window [1]
 %
 
 % -------------------------------------------------------------
@@ -34,6 +35,7 @@ function plot_scatter(data, cfg)
 %
 
 if nargin < 2, cfg = struct; end
+if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
 if ~isfield(cfg, 'color'),      cfg.color(1:size(data,2)) = {'k'}; end
 if ~isfield(cfg, 'style'),      cfg.style(1:size(data,2)) = {'*'}; end
 if ~isfield(cfg, 'link'), cfg.link = 0; end
@@ -44,7 +46,9 @@ if ~isfield(cfg, 'reverse'),    cfg.reverse = 0; end
 
 
 % general figure definitions
-figure;
+if cfg.newfig
+  figure;
+end
 set(gca,...
     'Box'          , 'off'     , ...
     'XColor'       , [0 0 0], ...
@@ -59,7 +63,7 @@ if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
 hold on
 
 for iCond = 1:size(data,2) 
-plot(ones(size(data,1),1)+iCond-1,data(:,iCond), cfg.style{iCond}, 'color', cfg.color{iCond})
+  plot(ones(size(data,1),1)+iCond-1,data(:,iCond), cfg.style{iCond}, 'color', cfg.color{iCond})
 end
 
 

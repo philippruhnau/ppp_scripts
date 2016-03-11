@@ -13,6 +13,7 @@ function h = plot_errorbars(data, cfg)
 %
 % optional input [default]:
 %
+% cfg.plot_units  - plot units of observation [0]
 % cfg.linewidth   - number [2]
 % cfg.color       - color indicator or RGB triplet ['k']
 % cfg.linestyle   - linestyle specifier ['-']
@@ -45,6 +46,7 @@ function h = plot_errorbars(data, cfg)
 
 % defaults
 if nargin < 2, cfg = struct; end
+if ~isfield(cfg, 'plot_units'), cfg.plot_units = 0; end
 if ~isfield(cfg, 'linewidth'), cfg.linewidth = 2; end
 if ~isfield(cfg, 'color'), cfg.color = 'k'; end
 if ~isfield(cfg, 'linestyle'), cfg.linestyle = '-'; end
@@ -78,7 +80,7 @@ seData = seData(:)';
 
 %% start plotting
 if cfg.newfig
- h= figure;
+ h = figure;
 end
 hold on;
 % white background
@@ -99,6 +101,7 @@ if cfg.line
     'LineWidth', cfg.linewidth,...
     'Color', cfg.color);
 end
+
 %% plot error bar whiskers
 seRange = [(meanData-seData)' (meanData+seData)'];
 % first vertical lines
@@ -122,4 +125,14 @@ for i = 1:size(seRange,1)
     'LineStyle', '-'  ,...
     'LineWidth', cfg.linewidth,...
     'Color', cfg.color)
+end
+
+%% plot units of observation
+
+if cfg.plot_units
+  plot(repmat(cfg.xposition, size(data,1), 1) , data, ...
+  '*', ...
+  'MarkerSize', 2,...
+  'MarkerEdgeColor','r',...
+  'MarkerFaceColor', 'r')
 end
