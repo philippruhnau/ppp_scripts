@@ -63,9 +63,8 @@ if ~isfield(cfg, 'xaxis'),
 else
   xtime = cfg.xaxis;
 end
+
 % convert color input to rgb triplets if not already
-
-
 if ~isfield(cfg, 'color'),
   colors = repmat([0 0 0],size(data,1),1);
 elseif iscell(cfg.color) % if colormap as input
