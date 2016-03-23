@@ -1,7 +1,7 @@
 function h = plot_hist(data, cfg)
 
 % PLOT_HIST(data,cfg)
-% plots histogram(s) based on data with various settings
+% plots (overlapping) histogram(s)
 %
 % mandatory input:
 %
@@ -11,10 +11,12 @@ function h = plot_hist(data, cfg)
 %
 % optional input [default]:
 %
+% cfg.nbin        - number of histogram bins [10]
 % cfg.color       - color indicator ('k'/'b' etc.) or RGB triplet [0 0 1]
 % cfg.alpha       - face alpha of histogram group [0.5 1];
 % cfg.edge_color  - bar edge color [matlab default]
 % cfg.newfig      - 1 for new figure window [1]
+% ------------------------------------------------------------------------- 
 
 % 20160323 - new implementation
 
@@ -39,7 +41,7 @@ function h = plot_hist(data, cfg)
 if nargin < 2, cfg = struct; end
 if ~isfield(cfg, 'alpha'), cfg.alpha = linspace(.5, 1, size(data,2)); end 
 if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
-
+if ~isfield(cfg, 'nbin'), cfg.nbin = 10; end
 
 % convert color input to rgb triplets if not already
 if ~isfield(cfg, 'color'), 
@@ -69,7 +71,7 @@ set(gcf,...
 %% histogram(s)
 
 for i = 1:size(data,2)
-  hist(data(:,i));  
+  hist(data(:,i), cfg.nbin);  
 end
 
 %% change color aspects 
