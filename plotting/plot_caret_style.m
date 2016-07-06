@@ -1,4 +1,4 @@
-function caml = plot_caret_style(name, resolution, material_mode, view_angle, save_figure)
+function caml = plot_caret_style(name, resolution, material_mode, view_angle, save_figure, big_factor)
 
 % function plot_caret_style(name, resolution, material_mode, view_angle, save_figure)
 % takes a figure (surface plot) and rotates it to some viewing angles
@@ -19,6 +19,7 @@ function caml = plot_caret_style(name, resolution, material_mode, view_angle, sa
 % view_angle    - 'right', 'left', 'occipital', 'frontal', 'dorsal',
 %                 'ventral', 'all' (default), or 2D coordinates [x y]
 % save_figure   - 1 for yes [default]
+% big_factor    - integer zoom in factor [2], for rotated brains better 1
 %
 % Output:
 % caml - camera light pointer (in case you want to move the image
@@ -34,6 +35,9 @@ end
 if nargin < 5
   save_figure = 1;
 end
+if nargin < 6
+  big_factor = 2;
+end
 
 %% user feedback
 if save_figure == 1
@@ -43,7 +47,7 @@ if save_figure == 1
   disp(' --- ')
 end
 %% make image bigger bigger (twice seems to be a nice size in the end)
-for i = 1:2
+for i = 1:big_factor
   set(gca, 'Position', get(gca, 'OuterPosition'))
 end
 

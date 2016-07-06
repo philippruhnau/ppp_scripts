@@ -22,6 +22,8 @@ function plot_axes(cfg)
 % cfg.ytext_pos   = 'left'; % 'left', 'right'
 % cfg.xlabel      = ''; % e.g. 'ms'
 % cfg.ylabel      = ''; % e.g. 'fT'
+% cfg.xpoints     = []; vector with exact points on xaxis you want ticks at
+% cfg.xpoints     = []; vector with exact points on yaxis you want ticks at
 % cfg.ylabel_rot  = [0]; rotation angle of ylabel text
 % cfg.text_dis    = [0 0]; % distance for the text away from the tick [x y]
 %                   , e.g. [0.1 6]
@@ -99,9 +101,16 @@ plot([cfg.origin(1) cfg.origin(1)], [cfg.lims(3) cfg.lims(4)], 'Color', cfg.colo
 
 
 % get points on x-axis and y-axis
-xpoints = cfg.lims(1):cfg.tick_steps(1):cfg.lims(2);
-ypoints = cfg.lims(3):cfg.tick_steps(2):cfg.lims(4);
-
+if ~isfield(cfg, 'xpoints') || isempty(cfg.xpoints)
+  xpoints = cfg.lims(1):cfg.tick_steps(1):cfg.lims(2);
+else
+  xpoints = cfg.xpoints;
+end
+if ~isfield(cfg, 'ypoints') || isempty(cfg.ypoints)
+  ypoints = cfg.lims(3):cfg.tick_steps(2):cfg.lims(4);
+else
+  ypoints = cfg.ypoints;
+end
 
 % get max points for axis label
 xlabpos = max(xpoints);
