@@ -47,7 +47,7 @@ elseif iscell(cfg.color) % if colormap as input
 else
   colors = cfg.color;
 end
-if isfield(cfg, 'ypos'), ydat = cfg.ypos; end
+if isfield(cfg, 'ypos'), ydat = cfg.ypos; else ydat = []; end
 
 
 if newfig
