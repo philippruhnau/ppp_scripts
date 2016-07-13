@@ -1,5 +1,6 @@
 function [latency, grandmean] = meeg_latencies(cfg)
 
+% [latency, grandmean] = MEEG_LATENCIES(cfg)
 % Finds peak maximum/minimum amplitude and respective latency
 % CAVE: within sub conditions must be the same in all between sub groups
 %
@@ -89,18 +90,18 @@ for iB = 1:numel(cfg.data)
     if strcmp(cfg.dir, 'min')
         direction = '--------Calculating MINIMUM peak------------';
         % calculate value and index
-        [gmval gmind] = min(mean(data(twin(1):twin(2),:,:),2));
+        [gmval, gmind] = min(mean(data(twin(1):twin(2),:,:),2));
     elseif strcmp(cfg.dir, 'max')
         direction = '--------Calculating MAXIMUM peak------------';
         % calculate value and index
-        [gmval gmind] = max(mean(data(twin(1):twin(2),:,:),2));
+        [gmval, gmind] = max(mean(data(twin(1):twin(2),:,:),2));
     end
     
     % Index is used for timewindow in single subjects
     % -----------------------------------------------
     gmind = squeeze(gmind+twin(1));
     twin_ind = [gmind-timevar gmind+timevar];
-    gmlat = gmind*1000/500+cfg.baseline;
+    gmlat = gmind*1000/cfg.srate+cfg.baseline;
     grandmean{iB} = [gmlat squeeze(gmval)];
     
     for iW = 1:size(data,3)
