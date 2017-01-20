@@ -118,14 +118,15 @@ end
 % currently the positions of around 86 channels are available (10-10 system
 set_channels = zeros(numel(ALLEEG),numel(cfg.channels));
 for i = 1:numel(ALLEEG)
-    [coor ch_names actCha cellInd] = eeg_channels(ALLEEG(i).chanlocs, cfg.channels);
+    [coor, ch_names, actCha, cellInd] = eeg_channels(ALLEEG(i).chanlocs, cfg.channels);
     if numel(ch_names) < numel(actCha)
-        set_channels(i,:) = cellInd(cellInd ~=0); % 0 indicates that channel (name/coordinates) is not in lookup_eeg_channels
+        set_channels(i,:) = cellInd; % 0 indicates that channel (name/coordinates) is not in lookup_eeg_channels
     elseif  ~isnumeric(cfg.channels)
         set_channels(i,:) = cellInd(cellInd ~=0);
     end
 end
-cfg.channels = set_channels(1,:);
+% now take only non-zero indixes
+cfg.channels = set_channels(1,set_channels(1,:)~=0);
 
 if size(cfg.channels,2) < size(cfg.channels,1), cfg.channels = cfg.channels'; end
 
@@ -400,46 +401,69 @@ end
 
 % functions embedded (independence): eeg_channels and save_figure
 
-function [coor n actCha cellInd] = eeg_channels(chaninfo, chan_sel)
+function [coor, n, actCha, cellInd] = eeg_channels(chaninfo, chan_sel)
 
 % eeg_channels(chaninfo, chan_sel)
 % looks up selected channel names/numbers  and coordinates for eeg-data
 % Input:
-% chaninfo - channel information in EEG.chanloc (eeglab)
-% chan_sel - cell array of strings or vector of numbers with channel selection
+% chaninfo - channel information in EEG.chanloc (eeglab), optional
+% chan_sel - string or vector of numbers with channel selection
 %
 % Output:
 % coor    - channels coordinates
 % n       - cell array of channel names concordant with existing names and
 %           coordinates in this file (so far 86 [10-10 system])
 % actCha  - selected channels names (whole self selection)
-% indb    - channel indizes of selection in ALLEEG, nesecary if input is
-%           cell array
 % cellInd - indizes of concordant channels of chan_sel and channels
 %           existent in this file, necesary if not matching
 %
-% ---------------------------------------------------
-% copyright (c), 2010, P. Ruhnau, email: ruhnau@uni-leipzig.de, 2010-07-29
 
+% ---------------------------------------------------
+% copyright (c), 2010, P. Ruhnau, email: mail (at) philipp-ruhnau.de, 2010-07-29
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+if nargin < 1, help eeg_channels; return, end
+
+if ~isempty(chaninfo)
+    actCha_check = struct2cell(chaninfo);
+    actCha_check = strtrim(upper(squeeze(actCha_check(1,:,:)))); 
+else
+    actCha_check = {'FP1'    'FPZ'    'FP2'    'AF9'    'AF7'    'AF5'    'AF3'    'AF1'    'AFZ'    'AF2'    'AF4'    'AF6',...
+    'AF8'    'AF10'    'F9'    'F7'    'F5'    'F3'    'F1'    'FZ'    'F2'    'F4'    'F6'    'F8'    'F10',...
+    'FT9'    'FT7'    'FC5'    'FC3'    'FC1'    'FCZ'    'FC2'    'FC4'    'FC6'    'FT8'    'FT10'    'T9',...
+    'T7'    'C5'    'C3'    'C1'    'CZ'    'C2'    'C4'    'C6'    'T8'    'T10'    'TP9'    'TP7'    'CP5',...
+    'CP3'    'CP1'    'CPZ'    'CP2'    'CP4'    'CP6'    'TP8'    'TP10'    'P9'    'P7'    'P5'    'P3',...
+    'P1'    'PZ'    'P2'    'P4'    'P6'    'P8'    'P10'    'PO9'    'PO7'    'PO5'    'PO3'    'PO1',...
+    'POZ'    'PO2'    'PO4'    'PO6'    'PO8'    'PO10'    'O1'    'OZ'    'O2'    'I1'    'IZ'    'I2',...
+    'VEOG'   'HEOG'};
+    
+end
 
 if iscell(chan_sel)
     % checks whether wanted channels are in the data
     actCha = upper(chan_sel);
-    actCha_check = struct2cell(chaninfo);
-    actCha_check = upper(squeeze(actCha_check(1,:,:)));
-    [t cellIndA cellIndB] = intersect(actCha_check, actCha);
-    
+    [t, cellIndA, cellIndB] = intersect(actCha_check, actCha);
     for i = 1:numel(cellIndB)
         cellInd(cellIndB(i)) = cellIndA(i); %#ok<AGROW>
     end
     actCha = actCha(cellInd~=0);
 else
     % checks whether wanted channels are in the data
-    actCha = struct2cell(chaninfo);
-    actCha_check = upper(squeeze(actCha(1,:,:)));
-    actCha = upper(squeeze(actCha(1,:,chan_sel)));
-    [t cellIndA cellIndB] = intersect(actCha_check, actCha);
-    
+    actCha = upper(actCha_check(:,chan_sel));
+    [t, cellIndA, cellIndB] = intersect(actCha_check, actCha);
     for i = 1:numel(cellIndB)
         cellInd(cellIndB(i)) = cellIndA(i); %#ok<AGROW>
     end
@@ -460,7 +484,7 @@ pos = [0.3811    0.8313;    0.4800    0.8487;    0.5789    0.8314;    0.2449    
     0.6774    0.3030;    0.7389    0.2870;    0.8036    0.2350;    0.2449    0.1371;    0.2919    0.2087;    0.3361    0.2189;...
     0.3829    0.2251;    0.4311    0.2286;    0.4800    0.2296;    0.5289    0.2286;    0.5771    0.2251;    0.6239    0.2189;...
     0.6681    0.2087;    0.7151    0.1371;    0.3811    0.1585;    0.4800    0.1411;    0.5789    0.1585;    0.3564    0.0744;...
-    0.4800    0.0527;    0.6036    0.0744;    0.6627    0.9035;  0.8018    0.9035];
+    0.4800    0.0527;    0.6036    0.0744;    0.6627    0.9035;  0.8018    0.9035; 0.1464    0.1000; 0.8136    0.1000];
 
 % original coordinates from fieldtrip
 % pos = [-0.4962    1.5271;   -0.9438    1.2990;   -0.5458    1.1705;   -0.3269    0.8091;   -0.6590    0.8138;   -0.9879    0.8588;   -1.2990    0.9438;...
@@ -474,8 +498,7 @@ pos = [0.3811    0.8313;    0.4800    0.8487;    0.5789    0.8314;    0.2449    
 %     0.3269   -0.8091;    0.6590   -0.8138;    0.9879   -0.8588;    1.2990   -0.9438;    1.5375   -1.2902;    0.9438   -1.2990;    0.5458   -1.1705;...
 %     0.4962   -1.5271;       0.4962    1.9285; 0.9924    1.9285];
 
-% P9 and P10 could account for M1(A1) and M2(A2) in my usual setups, therby
-% names changed to the latter
+% M1 and M2 added at the end (change below if A1/A2)
 names = {'FP1'    'FPZ'    'FP2'    'AF9'    'AF7'    'AF5'    'AF3'    'AF1'    'AFZ'    'AF2'    'AF4'    'AF6',...
     'AF8'    'AF10'    'F9'    'F7'    'F5'    'F3'    'F1'    'FZ'    'F2'    'F4'    'F6'    'F8'    'F10',...
     'FT9'    'FT7'    'FC5'    'FC3'    'FC1'    'FCZ'    'FC2'    'FC4'    'FC6'    'FT8'    'FT10'    'T9',...
@@ -483,24 +506,21 @@ names = {'FP1'    'FPZ'    'FP2'    'AF9'    'AF7'    'AF5'    'AF3'    'AF1'   
     'CP3'    'CP1'    'CPZ'    'CP2'    'CP4'    'CP6'    'TP8'    'TP10'    'P9'    'P7'    'P5'    'P3',...
     'P1'    'PZ'    'P2'    'P4'    'P6'    'P8'    'P10'    'PO9'    'PO7'    'PO5'    'PO3'    'PO1',...
     'POZ'    'PO2'    'PO4'    'PO6'    'PO8'    'PO10'    'O1'    'OZ'    'O2'    'I1'    'IZ'    'I2',...
-    'VEOG'   'HEOG'};
+    'VEOG'   'HEOG' 'M1' 'M2'};
 
 
-[n ind indb] = intersect(names, actCha);
-index = zeros(max(indb),1);
-index_check =zeros(max(ind),1);
-for i = 1:numel(indb)
-    index(indb(i)) = ind(i);
-    index_check(ind(i)) = indb(i);
-end
+[t, index,indActChan] = intersect(names, actCha);
 
-n = names(index(index>0));
-coor = pos(index(index>0),:);
+% get names and positions in right order
+n = names(index(indActChan));
+coor = pos(index(indActChan),:);
 
 % check for same amount of input channels as output channels otherwise
 % modify cellInd --> indizes of used channels in ALLEEG
-if numel(index_check(index_check~=0)) ~= numel(actCha)
-    cellInd = cellInd(sort(index_check(index_check ~=0)));
+if numel(indActChan) ~= numel(actCha)
+  % dunno what I did here before, now just replace channels that are
+  % missing with zeros
+    cellInd(setdiff(cellInd, indActChan)) = 0;% = cellInd(sort(index_check(index_check ~=0)));
 end
 
 function save_figure(name, resolution)

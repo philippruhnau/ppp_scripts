@@ -58,7 +58,6 @@ if ~isfield(cfg, 'newfig'); cfg.newfig = 1; end
 if ~isfield(cfg, 'clim'); cfg.clim = [min(min(data)) max(max(data))]; end
 % check whether caxis increases, otherwise crash
 if ~isfield(cfg, 'xaxis'), cfg.xaxis = 1:size(data, 2); end
-if isfield(cfg, 'xtime'), cfg.xaxis = cfg.xtime; warning('cfg.xtime field is deprecated and replaced by cfg.xaxis'); end
 % if no caption for y axis, take number (of, e.g., trials)
 if ~isfield(cfg, 'yaxis'), cfg.yaxis = 1:size(data,1); end
 % if no value here, have y-axis direction normal (increasing)
@@ -90,7 +89,7 @@ else
     
     cfg.n_ytick = p_tick(nearest(p_tick, cfg.n_ytick))+1;
     
-    disp(['Adapting your y-tick number to ' num2str( cfg.n_ytick )])
+    warning(['Adapting your y-tick number to ' num2str( cfg.n_ytick )])
   end
 end
 

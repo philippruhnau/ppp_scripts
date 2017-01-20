@@ -23,7 +23,7 @@ function plot_axes(cfg)
 % cfg.xlabel      = ''; % e.g. 'ms'
 % cfg.ylabel      = ''; % e.g. 'fT'
 % cfg.xpoints     = []; vector with exact points on xaxis you want ticks at
-% cfg.xpoints     = []; vector with exact points on yaxis you want ticks at
+% cfg.ypoints     = []; vector with exact points on yaxis you want ticks at
 % cfg.ylabel_rot  = [0]; rotation angle of ylabel text
 % cfg.text_dis    = [0 0]; % distance for the text away from the tick [x y]
 %                   , e.g. [0.1 6]

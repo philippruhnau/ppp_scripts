@@ -13,7 +13,7 @@ function y = wav_create_sine_tone(cfg);
 %
 % --------------------------------------------------
 % Creates a sine tone, including rise and fall times
-% copyright (c) 2010, Björn Herrmann, Email: bherrmann@cbs.mpg.de, 2010-03-01
+% copyright (c) 2010, Bj?rn Herrmann, Email: bherrmann@cbs.mpg.de, 2010-03-01
 
 % Load some defaults if appropriate
 % ---------------------------------
@@ -39,5 +39,6 @@ y    = tone .* rf_window;
 % Write new wavfile
 % -----------------
 if isfield(cfg, 'fname')
-	wavwrite(y, cfg.fs, cfg.nbits, cfg.fname);
+% 	wavwrite(y, cfg.fs, cfg.nbits, cfg.fname);
+  audiowrite(cfg.fname, y, cfg.fs, 'BitsPerSample', cfg.nbits);
 end
