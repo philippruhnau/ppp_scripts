@@ -1,13 +1,15 @@
 function data = make_bipolar(data, combining_array)
 
-% function [data] = MAGE_BIPOLAR(data, combining_array)
+% function [data] = MAKE_BIPOLAR(data, combining_array)
 % creates a new data set in which the data are re-referenced according to
 % an input array such that measurements for input measures a,b,c,d with the
 % combining_array [a b; b c; c d] results in new data a-minus-b,b-c,c-d 
 %
 % input
 % data            - cell array of trials with electrode-by-time arrays
-% combining_array - numeric n by 2 array defining how to reference
+% combining_array - numeric n by 2 array defining how to reference, if one
+%                   of the elements is a NaN then the original channel is
+%                   kept without re-referencing
 % 
 
 %% first create a new label field
