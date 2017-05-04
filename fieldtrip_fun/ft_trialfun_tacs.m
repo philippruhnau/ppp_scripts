@@ -27,7 +27,7 @@ cfg.trialdef.eventvalue =  ft_getopt(cfg.trialdef , 'eventvalue', 'peak');
 
 
 % read the header and determine the channel number corresponding with the EMG
-hdr         = ft_read_header(cfg.headerfile);
+hdr         = ft_read_header(cfg.headerfile, 'checkmaxfilter', 0);
 chanindx    = find(strcmp(cfg.trialdef.eventtype, hdr.label));
 
 if length(chanindx)>1
@@ -37,7 +37,7 @@ end
 % read all data of the MEG channel, assume continuous file format
 begsample = 1;
 endsample = hdr.nSamples*hdr.nTrials;
-meg       = ft_read_data(cfg.datafile, 'begsample', begsample, 'endsample', endsample, 'chanindx', chanindx);
+meg       = ft_read_data(cfg.datafile, 'begsample', begsample, 'endsample', endsample, 'chanindx', chanindx, 'checkmaxfilter', 0);
 
 
 
