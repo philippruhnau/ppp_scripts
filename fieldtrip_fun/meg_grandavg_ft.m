@@ -200,13 +200,8 @@ else
     data_ga = ft_freqgrandaverage(cfg, data{:});
 end
 
-
-% data_ga = check_grad(data_ga);
-
-% remove cfg, cause single subs in there
+% remove cfg, cause single subs in there somewhere...
 data_ga = rmfield(data_ga, 'cfg');
-
-
 
 %% save
 if isfield(cfg, 'outfile')
