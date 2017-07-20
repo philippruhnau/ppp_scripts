@@ -13,8 +13,10 @@ function [data_ga] = meg_grandavg_ft(cfg)
 %                       [41 42], 'dd'}; % detected)
 % cfg.combinegrads - true if neuromag sensor data and combination of planar
 %                    gradiometers is desired [true]
-% cfg.lpfreq - low pass filter freq
+% cfg.preproc     - options according to ft_preprocessing (filtering and
+%                   such)
 % cfg.fixchannels - 0 or 1 [0] usind obob_fixchannels 
+% cfg.latency     - select a latency of the input data
 % 
 %
 % output:
@@ -28,7 +30,10 @@ function [data_ga] = meg_grandavg_ft(cfg)
 if ~isfield(cfg, 'fnames'), error('cfg.fnames is obligatory'); else fnames = cfg.fnames; end
 if ~isfield(cfg, 'combinegrads'), combinegrads = true; else combinegrads = cfg.combinegrads; end
 if ~isfield(cfg, 'fixchannels'), fixchannels = false; else fixchannels =  cfg.fixchannels; end
-if ~isfield(cfg, 'lpfreq'), lpfreq = []; else lpfreq = cfg.lpfreq; end
+if ~isfield(cfg, 'preproc'), preproc = []; else preproc = cfg.preproc; end
+if ~isfield(cfg, 'latency'), latency = []; else latency = cfg.latency; end
+if ~isfield(cfg, 'outfile'), outfile = []; else outfile = cfg.outfile; end
+
 %% from input [defaults]
 ind = ['_' cfg.datatype];% 'pow'; 'fourier'; 'erf'; 'pbi'; 'zscore'
 
@@ -62,18 +67,23 @@ data = cell(1,numel(fnames));
 for iSub = 1:numel(fnames)
   
   %% load file
-  disp(' ')
+    disp('=------------------=')
     disp(['Loading: ' fnames{iSub}])
-    disp(' ')
+    disp('=------------------=')
     data{iSub} = load(fnames{iSub});
     
     %% some optional preprocessing steps
-    % filter if wanted
-    if ~isempty(lpfreq)
-      cfg_fi = [];
-      cfg_fi.lpfilter = 'yes';
-      cfg_fi.lpfreq = lpfreq;
+    % preprocessing if wanted
+    if ~isempty(preproc)
+      cfg_fi = preproc;
       data{iSub} = ft_preprocessing(cfg_fi, data{iSub});
+    end
+   
+    % select time window
+    if ~isempty(latency)
+      cfg = [];
+      cfg.latency = latency;
+      data{iSub} = ft_selectdata(cfg, data{iSub});
     end
     
     % fix removed channels if wanted, might be necessary for combinegrads
@@ -204,8 +214,8 @@ end
 data_ga = rmfield(data_ga, 'cfg');
 
 %% save
-if isfield(cfg, 'outfile')
-  disp(['Saving: ' cfg.outfile])
+if ~isempty(outfile)
+  disp(['Saving: ' outfile])
   save(outfile, '-struct', 'data_ga')
 end
 
