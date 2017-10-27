@@ -1,8 +1,9 @@
 function sem = stderror(data) 
 
-% function sem = stderror(stats)
-% calculates the standard error of the mean columnwise in n by m array
-% stats
+% function sem = stderror(data)
+% calculates the standard error of the mean columnwise in m by n array
+% input:
+% data - m by n data matrix
 %
 % if groups have unequal n, replace missing values with NaNs
 

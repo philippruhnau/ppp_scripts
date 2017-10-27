@@ -1,4 +1,4 @@
-function [beta] = winkel(l, g)
+function [beta] = visual_angle(l, g)
 
 % l - length
 % g - distance

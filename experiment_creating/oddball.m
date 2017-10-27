@@ -1,4 +1,4 @@
-function fin_mat = oddball(cfg,sub,block)
+function fin_mat = oddball(cfg,rand_state)
 
 % function oddball(cfg,sub,block) 
 % creates a N by 2 matrix of a randomized sequence containing the input 
@@ -107,9 +107,9 @@ if nargin == 3 && isempty(sub), sub=1; end
 % matrices for all patterns
 mat  = repmat(cfg.trains,[1 1 cfg.ntrains]);
 
-if exist('sub', 'var')
+if exist('rand_state', 'var')
     % fix randstate
-    rand('state', (sub - 1) + block);
+    rand('state', rand_state);
 end
 
 % permute
@@ -119,7 +119,7 @@ rand_mat_3D = mat(:,:,rand_idx);
 % first trains and 3D to 2D
 rand_mat = cfg.start;
 for i = 1:size(rand_mat_3D,3)
-rand_mat = [rand_mat; rand_mat_3D(:,:,i)];
+  rand_mat = [rand_mat; rand_mat_3D(:,:,i)];
 end
 
 

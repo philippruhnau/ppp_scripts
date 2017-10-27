@@ -1,4 +1,4 @@
-function data = make_bipolar(data, combining_array)
+function data = make_bipolar(data, combining_array, distance_vector)
 
 % function [data] = MAKE_BIPOLAR(data, combining_array)
 % creates a new data set in which the data are re-referenced according to
@@ -10,7 +10,16 @@ function data = make_bipolar(data, combining_array)
 % combining_array - numeric n by 2 array defining how to reference, if one
 %                   of the elements is a NaN then the original channel is
 %                   kept without re-referencing
+% distance_vector - if this is provided the data are divided by the value
+%                   given for each bipolar pair resulting in electric field
+%                   values [the length must match combining_array]
 % 
+
+
+% default
+if nargin<3 || isempty(distance_vector) % if empty set to 1 (no division)
+  distance_vector = ones(size(combining_array,1),1);
+end
 
 %% first create a new label field
 new_labels = cell(size(combining_array,1)+sum(~ismember(1:length(data.label), unique(combining_array(~isnan(combining_array))))),1);
@@ -38,9 +47,9 @@ for iT = 1:length(new_data)
   for iChan = 1:size(combining_array,1)
     if any(isnan(combining_array(iChan,:)))
       % if one of a pair is a nan then the user doesn't want a subtraction
-      new_data{iT}(iChan,:) = data.trial{iT}(combining_array(iChan,~isnan(combining_array(iChan,:))),:);
+      new_data{iT}(iChan,:) = data.trial{iT}(combining_array(iChan,~isnan(combining_array(iChan,:))),:)./distance_vector(iChan);
     else % here do subtraction of two channels
-      new_data{iT}(iChan,:) = diff(data.trial{iT}(combining_array(iChan,:),:));
+      new_data{iT}(iChan,:) = diff(data.trial{iT}(combining_array(iChan,:),:))./distance_vector(iChan);
     end
   end
   

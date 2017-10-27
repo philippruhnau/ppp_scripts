@@ -8,7 +8,7 @@ function [twdata, sedata, singsubs] = plot_bargraph(cfg)
 % cfg.comp - grouping vector e.g.: [1 1 1 2 2 2] indicates
 %            that the first three and the last three values
 %            belong together and are plotted as a group
-% 
+%
 % cfg.data.mean - vector of to be plotted mean values
 % cfg.data.se   - to be plotted standard error (same size as mean), set to
 %                 NaN if no plotting desired
@@ -29,7 +29,7 @@ function [twdata, sedata, singsubs] = plot_bargraph(cfg)
 %                  [default matlab color map]
 % cfg.newfig     - 1 to open a new figure [1]
 % cfg.reverse    - if exists, y-axis is reversed
-% cfg.singsubs   - m by n array of condition by individual subject values. 
+% cfg.singsubs   - m by n array of condition by individual subject values.
 %                  will be plotted as stars in the bargraph
 % ------------------------------------------------------------------------
 
@@ -56,10 +56,10 @@ function [twdata, sedata, singsubs] = plot_bargraph(cfg)
 
 %% defaults
 if nargin < 1, help plot_bargraph; return; end
-if nargin >1 
+if nargin >1
   error('!eeglab struct no longer supported, only taking cfg structure. check the help!');
 end
-if numel(cfg.comp) ~= numel(cfg.data.mean) 
+if numel(cfg.comp) ~= numel(cfg.data.mean)
   error('Grouping vector and data have a different number of elements')
 end
 
@@ -71,6 +71,7 @@ if ~isfield(cfg, 'eblength'), cfg.eblength = .1; end
 if ~isfield(cfg, 'width'), cfg.width = .9; end
 if ~isfield(cfg, 'linewidth'), cfg.linewidth = 1; end
 if ~isfield(cfg, 'newfig'), cfg.newfig = 1; end
+if ~isfield(cfg, 'baseline'), cfg.baseline = 0; end
 
 %% assign and reshape the data
 
@@ -108,49 +109,49 @@ hold on;
 
 % general settings
 set(gcf,...
-    'Color'            , [1 1 1],...
-    'PaperPositionMode', 'auto');
+  'Color'            , [1 1 1],...
+  'PaperPositionMode', 'auto');
 
 % y-axis limit
-if ~isfield(cfg, 'ylim'), 
-  cfg.ylim = [-max(max(abs(twdata))) max(max(abs(twdata)))]; 
+if ~isfield(cfg, 'ylim'),
+  cfg.ylim = [-max(max(abs(twdata))) max(max(abs(twdata)))];
   set(gca, 'YLim', cfg.ylim)
 end
 
 set(gca,...
-    'FontSize'     , cfg.fontsize,...
-    'Box'          , 'off');
+  'FontSize'     , cfg.fontsize,...
+  'Box'          , 'off');
 
 % x axis limits
 if isfield(cfg, 'xlim')
-    set(gca, 'XLim', cfg.xlim)
+  set(gca, 'XLim', cfg.xlim)
 end
 % reverse y-axis
 if isfield(cfg, 'reverse')
-    set(gca, 'YDir', 'reverse');
+  set(gca, 'YDir', 'reverse');
 end
 
 %% plot bars
 
 if numel(unique(cfg.comp)) == 1 % if only one bar-group (e.g. cfg.comp =[1 1 1];)
-    % not nice but no other idea to get even single comps in one
-    % bar group, 
-    % adding zeros as second bar group, which is not shown
-    b = bar([twdata; zeros(1,numel(twdata))], cfg.width, 'LineWidth' , cfg.linewidth, 'ShowBaseLine', 'off');
-    set(gca, 'XLim' , [0 numel(unique(cfg.comp))+1]);
-    
+  % not nice but no other idea to get even single comps in one
+  % bar group,
+  % adding zeros as second bar group, which is not shown
+  b = bar([twdata; zeros(1,numel(twdata))], cfg.width, 'LineWidth' , cfg.linewidth, 'ShowBaseLine', 'off');
+  set(gca, 'XLim' , [0 numel(unique(cfg.comp))+1]);
+  
 else
-    b = bar(twdata, cfg.width, 'LineWidth' , cfg.linewidth,'ShowBaseLine', 'off');
+  b = bar(twdata, cfg.width, 'LineWidth' , cfg.linewidth,'ShowBaseLine', 'off', 'BaseValue', cfg.baseline);
 end
 
 % labels and legend
 xlabel(cfg.xlabel);
 ylabel(cfg.ylabel);
 if ~strcmp(cfg.legend, 'none')
-    legend(b,cfg.legend)
+  legend(b,cfg.legend)
 end
 
-%% plot errorbars 
+%% plot errorbars
 
 for iB = 1:numel(b)
   % if se value is NaN, no errorbar plotting
@@ -185,7 +186,7 @@ for iB = 1:numel(b)
   end
   
 end
-%% something else 
+%% something else
 
 % colormap
 if ~isfield(cfg, 'color')
@@ -197,16 +198,23 @@ end
 %% stars for single subjects
 
 if isfield(cfg, 'singsubs')
-    % catch case where there is only one bar per condition (i.e. flip to
-    % fit ploting
-    while size(singsubs(:,:,1)) ~= size(xCo) 
-       xCo = reshape(xCo, size(singsubs(:,:,1)));
+  % get x coordinates of bars
+  xCo = zeros(numel(b(1).XData),numel(iB));
+  for iB = 1:numel(b)
+    xCo(:,iB) = b(iB).XData + b(iB).XOffset;
+  end
+  
+  % catch case where there is only one bar per condition (i.e. flip to
+  % fit ploting
+  
+  while size(singsubs(:,:,1)) ~= size(xCo)
+    xCo = reshape(xCo, size(singsubs(:,:,1)));
+  end
+  % loop tru
+  for a = 1:size(xCo,1)
+    for b = 1:size(xCo,2)
+      plot(xCo(a,b),squeeze(singsubs(a,b,:))','k*')
     end
-    % loop tru
-    for a = 1:size(xCo,1)
-        for b = 1:size(xCo,2)
-            plot(xCo(a,b),squeeze(singsubs(a,b,:))','k*')
-        end
-    end
+  end
 end
 

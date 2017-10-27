@@ -81,6 +81,9 @@ set(gcf,...
 
 if cfg.reverse == 1, set(gca, 'YDir'         , 'reverse'); end
 
+% plot something to clear the image in case the user wants to overwrite an
+% existing plot before turning hold back on
+plot(1,1);
 hold on
 
 

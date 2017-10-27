@@ -36,9 +36,9 @@ if ~isempty(strfind(name, 'png'))
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'eps'))
     if loose == 1
-      print(name, '-depsc2', ['-r' num2str(resolution)], '-loose')
+      print(name, '-depsc', ['-r' num2str(resolution)], '-loose')
     else
-      print(name, '-depsc2', ['-r' num2str(resolution)])
+      print(name, '-depsc', ['-r' num2str(resolution)])
     end
     disp(' '); disp(['Saving file: ' name '!!!']); disp(' ')
 elseif ~isempty(strfind(name, 'jpg'))
