@@ -139,6 +139,10 @@ for iSub = 1:numel(fnames)
             % save temporary structure for later field combining before combining
             % (keep grad and labelfield intact)
             temp = data{iSub};
+             
+            % combineplanar removes all 'non-fitting' fields, thus keep
+            % them
+            temp_orig = data{iSub};
             
             % now for average (avg, powspctrm, fourierspctrm)
             cfg = [];
@@ -159,7 +163,7 @@ for iSub = 1:numel(fnames)
             % now combine grads for each other field
             for iCond = 1:size(cond,1)
                 % fill each field seperatedly in avg field
-                temp.(avg_par) = data{iSub}.(cond{iCond,2});
+                temp.(avg_par) = temp_orig.(cond{iCond,2});
                 % combine
                 cfg = [];
                 if isfield(data{iSub}, 'fourierspctrm')
