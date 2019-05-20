@@ -113,7 +113,7 @@ set(gcf,...
   'PaperPositionMode', 'auto');
 
 % y-axis limit
-if ~isfield(cfg, 'ylim'),
+if ~isfield(cfg, 'ylim')
   cfg.ylim = [-max(max(abs(twdata))) max(max(abs(twdata)))];
   set(gca, 'YLim', cfg.ylim)
 end

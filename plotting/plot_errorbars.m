@@ -14,6 +14,7 @@ function h = plot_errorbars(data, cfg)
 % optional input [default]:
 %
 % cfg.plot_units  - plot units of observation [0]
+% cfg.xposition   - x positions of error bars
 % cfg.linewidth   - number [2]
 % cfg.color       - color indicator or RGB triplet ['k']
 % cfg.linestyle   - linestyle specifier ['-']
@@ -81,19 +82,22 @@ seData = seData(:)';
 %% start plotting
 if cfg.newfig
  h = figure;
+ % white background
+ set(gcf,...
+     'Color'            , [1 1 1],...
+     'PaperPositionMode', 'auto');
 end
 hold on;
-% white background
-set(gcf,...
-  'Color'            , [1 1 1],...
-  'PaperPositionMode', 'auto');
+
 
 %% plot markers
+if ischar(cfg.marker) || cfg.marker~=0
 plot(cfg.xposition , meanData, ...
   cfg.marker, ...
   'MarkerSize', cfg.m_size,...
   'MarkerEdgeColor',cfg.m_edgecolor,...
   'MarkerFaceColor', cfg.m_facecolor)
+end
 %% plot line connecting markers
 if cfg.line
   plot(cfg.xposition , meanData, ...

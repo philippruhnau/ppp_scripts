@@ -13,6 +13,8 @@ function plot_floating_bar(data, cfg)
 %                 matlab color letters in a cell array
 % cfg.edgecolor = edge color ['none']
 % cfg.ypos      = n by 2 y-axis upper and lower edges of the bars []
+% cfg.names     = cell array of strings written next to the bars
+% cfg.name_size = fontsize 
 
 % copyright (c), 2016, P. Ruhnau, email: mail(at)philipp-ruhnau.de
 %
@@ -39,7 +41,7 @@ if nargin < 2,                  cfg = []; end
 if ~isfield(cfg, 'newfig'), newfig = 1; else newfig = cfg.newfig; end
 if ~isfield(cfg, 'color'),
   colors = repmat([0 0 0],size(data,1),1);
-elseif iscell(cfg.color) % if colormap as input
+elseif iscell(cfg.color) % if letter for color as input
   for i = 1:numel(cfg.color)
     % this is pretty cool
     colors(i,:) = bitget(find('krgybmcw'==cfg.color{i})-1,1:3);
@@ -48,7 +50,8 @@ else
   colors = cfg.color;
 end
 if isfield(cfg, 'ypos'), ydat = cfg.ypos; else ydat = []; end
-
+if isfield(cfg, 'names'), names = cfg.names; else names = []; end
+if isfield(cfg,'name_size'), fsize = cfg.name_size; else fsize = 16; end
 
 if newfig
   figure;
@@ -67,7 +70,11 @@ end
 for iB = 1:size(data,1)
   xdat = data(iB, :);
   yb = ydat(iB,:);
-    fill([xdat(1) xdat(1) xdat(2) xdat(2)], [yb(1) yb(2) yb(2) yb(1)], colors(iB,:), 'EdgeColor', 'none');
+  fill([xdat(1) xdat(1) xdat(2) xdat(2)], [yb(1) yb(2) yb(2) yb(1)], colors(iB,:), 'EdgeColor', 'none');
+  if ~isempty(names)
+    text(xdat(2),mean(yb),names(iB), 'fontsize', fsize);
+  end
+  
 end
 
 %% default adjustments

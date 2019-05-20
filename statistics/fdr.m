@@ -71,5 +71,5 @@ end;
 if isempty(pID), pID = 0; end;
 
 if nargout > 1
-    p_masked = pvals<=I/V*q/cVID;
+    p_masked = pvals(:)<=I/V*q/cVID;
 end;

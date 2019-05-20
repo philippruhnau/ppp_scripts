@@ -28,8 +28,9 @@ function plot_axes(cfg)
 % cfg.text_dis    = [0 0]; % distance for the text away from the tick [x y]
 %                   , e.g. [0.1 6]
 % cfg.xexclude    = [cfg.origin(1)]; % exclude these x-numbers from
-%                   plotting as text
-% cfg.yexclude    = [cfg.origin(2)]; % exclude these y-numbers from plotting as text
+%                   plotting as text; if set to 'all' no tics 
+% cfg.yexclude    = [cfg.origin(2)]; % exclude these y-numbers from 
+%                   plotting as text; if set to 'all' no tics 
 %
 % Note: Many of the parameters use the unit of the x-axis or the y-axis.
 % Furthermore, when using reversed axes you need to reverse them before
@@ -72,7 +73,7 @@ if ~isfield(cfg, 'xlabel'),      cfg.xlabel      = ''; end
 if ~isfield(cfg, 'ylabel'),      cfg.ylabel      = ''; end
 if ~isfield(cfg, 'xexclude'),    cfg.xexclude    = cfg.origin(1); end
 if ~isfield(cfg, 'yexclude'),    cfg.yexclude    = cfg.origin(2); end
-if ~isfield(cfg, 'text_dis'),    cfg.text_dis    = [0 0]; end
+if ~isfield(cfg, 'text_dis'),    cfg.text_dis    = [cfg.tick_length(1) cfg.tick_length(2)]; end
 if ~isfield(cfg, 'ylabel_rot'),  cfg.ylabel_rot  = 0; end
 hold on;
 
@@ -185,8 +186,9 @@ else
     xtext = cfg.xtick_text;
 end
 
-text(xpoints, repmat(tposy,1,length(xpoints)), xtext, 'HorizontalAlignment', 'center', 'VerticalAlignment', tpos, 'Color', cfg.color, 'FontSize', cfg.font_size, 'FontWeight', cfg.font_weight);
-
+if ~strcmp(cfg.xexclude, 'all')
+  text(xpoints, repmat(tposy,1,length(xpoints)), xtext, 'HorizontalAlignment', 'center', 'VerticalAlignment', tpos, 'Color', cfg.color, 'FontSize', cfg.font_size, 'FontWeight', cfg.font_weight);
+end
 
 % set distance of text to the y-axis
 if strcmp(cfg.ytick_type, 'both') && strcmp(cfg.ytext_pos, 'left'), ytickTextPnt = -cfg.tick_length(2); end
@@ -216,9 +218,9 @@ else
     ytext = cfg.ytick_text;
 end
 
-
-text(repmat(tposx,1,length(ypoints)), ypoints, ytext, 'HorizontalAlignment', tpos, 'VerticalAlignment', 'middle', 'Color', cfg.color, 'FontSize', cfg.font_size, 'FontWeight', cfg.font_weight);
-
+if ~strcmp(cfg.yexclude, 'all')
+  text(repmat(tposx,1,length(ypoints)), ypoints, ytext, 'HorizontalAlignment', tpos, 'VerticalAlignment', 'middle', 'Color', cfg.color, 'FontSize', cfg.font_size, 'FontWeight', cfg.font_weight);
+end
 
 % set distance of xlabel to the x-axis
 if strcmp(cfg.xtick_type, 'both') && strcmp(cfg.xtext_pos, 'above'), xtickLabPnt = -cfg.tick_length(1); end

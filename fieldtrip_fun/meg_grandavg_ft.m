@@ -122,6 +122,7 @@ for iSub = 1:numel(fnames)
         % remove trial field if present (otherwise combineplanar might crash,
         % assuming single trial data) this holds for erf data
         if isfield(data{iSub}, 'trial')
+            data{iSub}.avg =  data{iSub}.trial;
             data{iSub} = rmfield(data{iSub}, 'trial');
         end % if
         

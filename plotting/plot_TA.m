@@ -10,7 +10,7 @@ function plot_TA(data, cfg)
 %
 % cfg.ylim       - y-axis limits [maxabs]
 % cfg.xaxis      - points for the x-axis [by default 1:size(data,2)]
-% cfg.marker     - m by 2 array for highlighted areas in ms
+% cfg.highlight  - m by 2 array for highlighted areas in ms
 % cfg.vline      - x-values for vertical lines [none]; can be further
 %                  specified in regard to color and width for each
 %                  individual line using cfg.vline_style.color/width
@@ -87,11 +87,11 @@ hold on
 
 %% actual plotting
 
-%% grey markers (far background...)
-if isfield(cfg, 'marker')
+%% grey highlights (far background...)
+if isfield(cfg, 'highlight')
   yb = cfg.ylim;
-  for iM = 1:size(cfg.marker,1)
-    fill([cfg.marker(iM,1) cfg.marker(iM,1) cfg.marker(iM,2) cfg.marker(iM,2)], [yb(1) yb(2) yb(2) yb(1)], [0.9 0.9 0.9], 'EdgeColor', 'none');
+  for iM = 1:size(cfg.highlight,1)
+    fill([cfg.highlight(iM,1) cfg.highlight(iM,1) cfg.highlight(iM,2) cfg.highlight(iM,2)], [yb(1) yb(2) yb(2) yb(1)], [0.9 0.9 0.9], 'EdgeColor', 'none');
   end
 end
 
@@ -108,9 +108,15 @@ if isfield(cfg, 'error_area')
     % create x-vals in same order
     xvals = [xtime fliplr(xtime)]';
     
+    % capture NaNs (not ideal because this draws 'over' the NaN area,
+    % better to draw independent lines w error shades
+    nanidx = isnan(eb_area);
+    eb_area(nanidx) = [];
+    xvals(nanidx) = [];
+    
     % now fill areas around final curve (dunno, but patch seems to do the
     % same)
-    %           fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
+%               fill(xvals, eb_area, se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
     patch(xvals, eb_area, 1, 'FaceColor', se_col, 'EdgeColor', 'none', 'FaceAlpha', .2)
     
     if isfield(cfg, 'error_edge') && cfg.error_edge
